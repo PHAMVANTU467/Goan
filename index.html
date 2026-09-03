@@ -1,1060 +1,769 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAN â€” ÄÄƒng nháº­p há»‡ thá»‘ng</title>
+<title>GOAN — Đăng nhập hệ thống</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --cyan-primary: #33CCFF;
-    --cyan-light: #99FFFF;
-    --cyan-soft: #e5faff;
-    --cyan-bg: #f0fdff;
-    --blue-600: #0077e6;
-    --blue-700: #005bb5;
-    --blue-800: #00458a;
-    --blue-900: #022b59;
-    --ink-900: #0f172a;
-    --ink-700: #334155;
-    --ink-500: #64748b;
-    --ink-400: #94a3b8;
-    --line: #d8e8f5;
-    --white: #ffffff;
-    --danger: #ef4444;
-    --danger-bg: #fef2f2;
-    --success: #10b981;
-    --success-bg: #ecfdf5;
+    /* Bảng màu chuẩn: #33CCFF chuyển dần về #99FFFF kết hợp Xanh dương & Trắng */
+    --grad-start: #33CCFF;
+    --grad-end:   #99FFFF;
+    --blue-dark:  #005bb5;
+    --blue-deep:  #003d80;
+    --blue-primary:#0077e6;
+    --blue-btn:   #0088ff;
+    --blue-btn-hover:#0066cc;
+    --text-dark:  #0f172a;
+    --text-muted: #64748b;
+    --text-label: #334155;
+    --border-card:#dbeafe;
+    --input-border:#cbd5e1;
+    --danger:     #ef4444;
+    --success:    #10b981;
   }
 
   *{box-sizing:border-box; margin:0; padding:0;}
-
-  body{
-    font-family:'Inter', sans-serif;
-    color:var(--ink-900);
-    background: linear-gradient(135deg, #33CCFF 0%, #6be3ff 32%, #99FFFF 70%, #e0fcff 100%);
-    min-height:100vh;
+  html, body{
+    height:100%;
+    font-family:'Plus Jakarta Sans', 'Inter', sans-serif;
+    color:var(--text-dark);
     -webkit-font-smoothing:antialiased;
   }
 
-  .screen{
+  /* NỀN GRADIENT CHUYỂN MÀU #33CCFF -> #99FFFF KẾT HỢP TRẮNG */
+  body{
     min-height:100vh;
-    display:grid;
-    grid-template-columns:1.15fr 1fr;
+    background:linear-gradient(135deg, #33CCFF 0%, #66d9ff 35%, #99FFFF 70%, #d5f7ff 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
     position:relative;
-    overflow:hidden;
-    background:
-      radial-gradient(circle at 18% 25%, rgba(255, 255, 255, 0.45) 0%, transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(153, 255, 255, 0.5) 0%, transparent 45%),
-      linear-gradient(140deg, #33CCFF 0%, #6be3ff 32%, #99FFFF 68%, #e8fdff 100%);
+    overflow-x:hidden;
   }
 
-  /* Pattern ná»n nháº¹ cÃ´ng nghá»‡ */
-  .screen::before{
+  /* HOA VĂN ÁNH SÁNG NỀN */
+  body::before{
     content:"";
     position:absolute;
-    inset:0;
-    background-image:radial-gradient(rgba(0, 119, 230, 0.08) 1.2px, transparent 1.2px);
-    background-size:24px 24px;
+    width:650px;
+    height:650px;
+    background:radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 70%);
+    top:-120px;
+    left:-120px;
+    border-radius:50%;
+    pointer-events:none;
+  }
+  body::after{
+    content:"";
+    position:absolute;
+    width:550px;
+    height:550px;
+    background:radial-gradient(circle, rgba(51,204,255,0.45) 0%, rgba(153,255,255,0) 70%);
+    bottom:-100px;
+    right:-100px;
+    border-radius:50%;
     pointer-events:none;
   }
 
-  /* ===================== LEFT: BRAND PANEL ===================== */
-  .brand{
+  /* KHUNG BỐ CỤC CHÍNH (CONTAINER) */
+  .auth-wrapper{
+    width:100%;
+    max-width:1060px;
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    background:rgba(255, 255, 255, 0.45);
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+    border-radius:32px;
+    border:1.5px solid rgba(255, 255, 255, 0.85);
+    box-shadow:
+      0 24px 60px rgba(0, 80, 160, 0.18),
+      0 4px 16px rgba(51, 204, 255, 0.2),
+      inset 0 1px 2px rgba(255,255,255,0.9);
+    overflow:hidden;
     position:relative;
     z-index:2;
+  }
+
+  /* CỘT TRÁI: MINH HỌA HỆ THỐNG */
+  .left-hero{
+    padding:48px 44px;
     display:flex;
     flex-direction:column;
-    padding:54px 60px 48px;
     justify-content:space-between;
+    background:linear-gradient(160deg, rgba(255,255,255,0.65) 0%, rgba(210,245,255,0.5) 100%);
+    border-right:1px solid rgba(255,255,255,0.6);
+    position:relative;
   }
-
-  .brand-top{
+  .brand-header{
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:12px;
   }
-
-  .brand-logo-circle{
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    background:var(--blue-600);
-    box-shadow:0 8px 20px rgba(0, 119, 230, 0.28);
+  .brand-logo-icon{
+    width:44px;
+    height:44px;
+    border-radius:12px;
+    background:linear-gradient(135deg, #0077e6 0%, #33CCFF 100%);
     display:flex;
     align-items:center;
     justify-content:center;
-    flex:none;
+    box-shadow:0 8px 18px rgba(0, 119, 230, 0.35);
   }
-  .brand-logo-circle svg{
-    width:26px;
-    height:26px;
-    color:var(--white);
+  .brand-logo-icon svg{
+    width:24px;
+    height:24px;
+    fill:#ffffff;
   }
-
   .brand-title{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:26px;
-    font-weight:700;
-    color:var(--blue-700);
-    letter-spacing:0.4px;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:0.5px;
+    background:linear-gradient(135deg, #005bb5 0%, #0088ff 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
   }
 
-  .brand-center{
-    margin:auto 0;
-    padding:30px 0;
+  .hero-text-block{
+    margin:28px 0 20px;
   }
-
-  .brand-badge{
+  .hero-tag{
     display:inline-flex;
     align-items:center;
-    gap:8px;
-    background:rgba(255, 255, 255, 0.7);
-    backdrop-filter:blur(8px);
-    border:1px solid rgba(255, 255, 255, 0.9);
-    padding:7px 16px;
-    border-radius:100px;
-    color:var(--blue-700);
-    font-size:13px;
-    font-weight:600;
-    margin-bottom:20px;
-    box-shadow:0 4px 12px rgba(0, 119, 230, 0.08);
-  }
-  .brand-badge .dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:var(--blue-600);
-    box-shadow:0 0 0 3px rgba(0, 119, 230, 0.2);
-  }
-
-  .brand-slogan{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:clamp(30px, 3.2vw, 42px);
+    gap:6px;
+    background:rgba(0, 119, 230, 0.1);
+    color:var(--blue-dark);
+    font-size:12.5px;
     font-weight:700;
-    color:var(--blue-900);
-    line-height:1.2;
-    margin-bottom:16px;
+    padding:6px 14px;
+    border-radius:100px;
+    margin-bottom:14px;
+    border:1px solid rgba(0, 119, 230, 0.15);
   }
-  .brand-slogan span{
-    color:var(--blue-600);
+  .hero-title{
+    font-size:32px;
+    font-weight:800;
+    line-height:1.22;
+    color:#003d80;
+    margin-bottom:14px;
+    letter-spacing:-0.5px;
   }
-
-  .brand-desc{
-    font-size:15px;
-    color:var(--ink-700);
+  .hero-title span{
+    background:linear-gradient(135deg, #0077e6 0%, #00b4d8 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .hero-desc{
+    font-size:14px;
     line-height:1.6;
+    color:var(--text-muted);
     max-width:44ch;
   }
 
-  /* Thiáº¿t bá»‹ minh há»a POS thanh toÃ¡n cÃ´ng nghá»‡ cao */
-  .brand-illustration{
-    margin-top:28px;
+  /* MINH HỌA THIẾT BỊ 3D */
+  .hero-illustration{
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
+    padding:16px 0 10px;
   }
-  .illustration-svg{
+  .pos-station-svg{
     width:100%;
-    max-width:460px;
+    max-width:350px;
     height:auto;
-    filter:drop-shadow(0 20px 30px rgba(0, 90, 160, 0.15));
+    filter:drop-shadow(0 18px 30px rgba(0, 90, 180, 0.16));
   }
 
-  .brand-footer{
-    font-size:13px;
-    color:var(--ink-700);
-    opacity:0.85;
-  }
-
-  /* ===================== RIGHT: FORM PANEL ===================== */
-  .panel{
-    position:relative;
-    z-index:2;
+  .hero-footer{
+    font-size:12px;
+    color:#64748b;
+    border-top:1px solid rgba(0, 119, 230, 0.12);
+    padding-top:14px;
     display:flex;
     align-items:center;
-    justify-content:center;
-    padding:40px 32px;
+    justify-content:space-between;
   }
 
-  /* THáºº CARD TRáº®NG TINH Táº¾ (TÆ¯Æ NG Tá»° áº¢NH MáºªU) */
-  .form-card{
-    width:100%;
-    max-width:440px;
-    background:var(--white);
-    border-radius:24px;
-    padding:44px 38px 40px;
-    box-shadow:0 24px 60px rgba(0, 110, 180, 0.16), 0 4px 16px rgba(0,0,0,0.03);
-    border:1px solid rgba(255, 255, 255, 0.85);
+  /* CỘT PHẢI: FORM ĐĂNG NHẬP CARD TRẮNG */
+  .right-form-wrap{
+    padding:44px 42px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    background:#ffffff;
+    border-radius:0 32px 32px 0;
   }
 
   .card-top{
     text-align:center;
-    margin-bottom:28px;
+    margin-bottom:26px;
   }
-
-  .card-logo{
+  .card-avatar{
     width:56px;
     height:56px;
-    border-radius:50%;
-    background:var(--blue-600);
-    box-shadow:0 8px 20px rgba(0, 119, 230, 0.3);
+    border-radius:18px;
+    background:linear-gradient(135deg, #0077e6 0%, #33CCFF 100%);
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    margin-bottom:16px;
+    margin-bottom:14px;
+    box-shadow:0 10px 22px rgba(0, 119, 230, 0.28);
   }
-  .card-logo svg{
+  .card-avatar svg{
     width:28px;
     height:28px;
-    color:var(--white);
+    fill:#ffffff;
   }
-
-  .card-title{
-    font-family:'Space Grotesk', sans-serif;
+  .form-header-title{
     font-size:23px;
-    font-weight:700;
-    color:var(--ink-900);
+    font-weight:800;
+    color:var(--text-dark);
+    margin-bottom:6px;
     letter-spacing:-0.3px;
   }
+  .form-header-sub{
+    font-size:13.5px;
+    color:var(--text-muted);
+  }
 
-  .step{ display:none; }
-  .step.active{ display:block; }
-
-  /* FIELD INPUTS */
-  .field{
+  /* THÔNG BÁO ALERT ĐĂNG XUẤT */
+  .alert-box{
+    display:none;
+    align-items:center;
+    gap:10px;
+    padding:11px 14px;
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    border-radius:10px;
+    color:#15803d;
+    font-size:13px;
+    font-weight:600;
     margin-bottom:18px;
   }
+  .alert-box.show{ display:flex; }
+  .alert-box svg{ width:18px; height:18px; flex:none; }
 
-  .field label{
-    display:block;
-    font-size:13.5px;
-    font-weight:600;
-    color:var(--ink-900);
-    margin-bottom:8px;
+  /* FORM INPUTS */
+  .form-group{
+    margin-bottom:18px;
   }
-
-  .input-wrap{
+  .form-group label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-label);
+    margin-bottom:7px;
+  }
+  .input-icon-wrap{
     position:relative;
     display:flex;
     align-items:center;
   }
-
   .input-icon{
     position:absolute;
     left:14px;
-    color:var(--ink-400);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    width:18px;
+    height:18px;
+    color:#94a3b8;
     pointer-events:none;
     transition:color .15s ease;
   }
-  .input-icon svg{ width:18px; height:18px; }
-
-  .input-wrap input{
+  .form-input{
     width:100%;
-    padding:13px 40px 13px 44px;
-    border:1.5px solid #dce8f3;
-    border-radius:10px;
-    background:#ffffff;
-    font-family:'Inter', sans-serif;
-    font-size:14.5px;
-    color:var(--ink-900);
+    padding:12px 14px 12px 42px;
+    border:1.5px solid var(--input-border);
+    border-radius:12px;
+    font-size:14px;
+    font-family:'Plus Jakarta Sans', 'Inter', sans-serif;
+    color:var(--text-dark);
+    background:#f8fafc;
     outline:none;
     transition:all .18s ease;
   }
-
-  .input-wrap input::placeholder{
-    color:var(--ink-400);
-    font-size:14px;
+  .form-input:focus{
+    background:#ffffff;
+    border-color:var(--blue-primary);
+    box-shadow:0 0 0 4px rgba(51, 204, 255, 0.22);
+  }
+  .input-icon-wrap:focus-within .input-icon{
+    color:var(--blue-primary);
   }
 
-  .input-wrap:focus-within input{
-    border-color:var(--cyan-primary);
-    box-shadow:0 0 0 4px rgba(51, 204, 255, 0.2);
-  }
-  .input-wrap:focus-within .input-icon{
-    color:var(--blue-600);
-  }
-
-  .input-wrap.error input{
-    border-color:var(--danger);
-    background:var(--danger-bg);
-  }
-  .input-wrap.error .input-icon{
-    color:var(--danger);
-  }
-
-  .icon-pw-btn{
+  .toggle-pwd{
     position:absolute;
-    right:12px;
+    right:14px;
     background:none;
     border:none;
-    color:var(--ink-400);
     cursor:pointer;
+    color:#94a3b8;
     display:flex;
     align-items:center;
-    padding:4px;
-    transition:color .15s ease;
   }
-  .icon-pw-btn:hover{ color:var(--ink-700); }
-  .icon-pw-btn svg{ width:18px; height:18px; }
+  .toggle-pwd:hover{ color:var(--text-dark); }
+  .toggle-pwd svg{ width:18px; height:18px; }
 
-  .field-note{
-    font-size:12px;
-    color:var(--danger);
-    margin-top:6px;
-    display:none;
-  }
-  .field-note.show{ display:block; }
-
-  /* REMEMBER & FORGOT */
-  .row-meta{
+  /* ROW TIỆN ÍCH */
+  .form-extra{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    margin:18px 0 22px;
     font-size:13px;
+    margin-bottom:20px;
   }
-
-  .remember-box{
+  .remember-wrap{
     display:flex;
     align-items:center;
     gap:8px;
-    color:var(--ink-700);
     cursor:pointer;
-    user-select:none;
+    color:var(--text-muted);
   }
-  .remember-box input{
-    width:16px;
-    height:16px;
-    accent-color:var(--blue-600);
+  .remember-wrap input{
     cursor:pointer;
+    accent-color:var(--blue-primary);
+    width:15px;
+    height:15px;
   }
-
-  .link-forgot{
-    color:var(--blue-600);
+  .forgot-link{
+    color:var(--blue-primary);
     text-decoration:none;
     font-weight:600;
-    transition:color .15s ease;
   }
-  .link-forgot:hover{
-    color:var(--blue-800);
-    text-decoration:underline;
-  }
+  .forgot-link:hover{ text-decoration:underline; }
 
-  /* NÃšT ÄÄ‚NG NHáº¬P XANH DÆ¯Æ NG Rá»°C Rá»  (GIá»NG áº¢NH) */
+  /* NÚT ĐĂNG NHẬP XANH DƯƠNG RỰC RỠ */
   .btn-submit{
     width:100%;
     padding:13px 20px;
     border:none;
-    border-radius:10px;
+    border-radius:12px;
     background:linear-gradient(135deg, #0077e6 0%, #0099ff 100%);
-    color:var(--white);
-    font-family:'Inter', sans-serif;
+    color:#ffffff;
     font-size:15px;
-    font-weight:600;
+    font-weight:700;
+    font-family:'Plus Jakarta Sans', 'Inter', sans-serif;
     cursor:pointer;
+    box-shadow:0 6px 18px rgba(0, 119, 230, 0.32);
+    transition:all .18s ease;
     display:flex;
     align-items:center;
     justify-content:center;
     gap:8px;
-    box-shadow:0 8px 20px rgba(0, 119, 230, 0.28);
-    transition:all .18s ease;
   }
   .btn-submit:hover{
     background:linear-gradient(135deg, #0066cc 0%, #0088ee 100%);
-    box-shadow:0 10px 24px rgba(0, 119, 230, 0.38);
+    box-shadow:0 8px 24px rgba(0, 119, 230, 0.42);
     transform:translateY(-1px);
-  }
-  .btn-submit:active{
-    transform:translateY(0);
   }
   .btn-submit svg{ width:18px; height:18px; }
 
-  .btn-submit.shake{ animation:shake .32s ease; }
-  @keyframes shake{
-    25%{ transform:translateX(-6px); }
-    75%{ transform:translateX(6px); }
-  }
-
-  /* ALERTS */
-  .alert-box{
-    display:none;
-    align-items:flex-start;
-    gap:10px;
-    padding:11px 14px;
-    border-radius:9px;
-    font-size:12.8px;
-    line-height:1.45;
-    margin-top:14px;
-  }
-  .alert-box.show{ display:flex; }
-  .alert-danger{
-    background:var(--danger-bg);
-    border:1px solid #fed7d7;
-    color:#991b1b;
-  }
-  .alert-success{
-    background:var(--success-bg);
-    border:1px solid #bbf7d0;
-    color:#166534;
-    margin-bottom:16px;
-    margin-top:0;
-  }
-
-  /* KHá»I TÃ€I KHOáº¢N DEMO */
-  .demo-box{
+  /* HỘP TÀI KHOẢN DÙNG THỬ (DEMO ACCOUNT) */
+  .demo-account-box{
     margin-top:22px;
-    padding:14px 16px;
-    background:var(--cyan-soft);
-    border:1.5px dashed var(--cyan-primary);
-    border-radius:12px;
+    background:#f0fbff;
+    border:1.5px dashed #b9e6fc;
+    border-radius:14px;
+    padding:12px 16px;
   }
-  .demo-box-header{
+  .demo-header{
     display:flex;
     align-items:center;
     justify-content:space-between;
     margin-bottom:8px;
   }
   .demo-badge{
-    font-size:11px;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    background:#e0f4fe;
+    color:var(--blue-dark);
+    font-size:11.5px;
     font-weight:700;
-    color:var(--blue-700);
-    background:rgba(51, 204, 255, 0.3);
     padding:3px 8px;
     border-radius:6px;
-    letter-spacing:0.4px;
-  }
-  .demo-sub{
-    font-size:12px;
-    color:var(--ink-500);
-  }
-  .demo-credentials{
-    font-size:12.8px;
-    color:var(--ink-700);
-    display:flex;
-    gap:14px;
-    margin-bottom:10px;
-    flex-wrap:wrap;
-  }
-  .demo-credentials strong{
-    color:var(--blue-900);
-    font-family:monospace;
-    font-size:13.5px;
-    user-select:all;
   }
   .demo-actions{
     display:flex;
     gap:8px;
   }
-  .btn-demo-fill{
-    flex:1;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    padding:8px 10px;
-    background:var(--white);
-    border:1.5px solid var(--cyan-primary);
-    border-radius:8px;
-    color:var(--blue-700);
-    font-size:12.5px;
-    font-weight:600;
-    cursor:pointer;
-    transition:all .15s ease;
-  }
-  .btn-demo-fill:hover{
-    background:#d8f8ff;
-  }
   .btn-demo-quick{
-    flex:1.25;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    padding:8px 10px;
-    background:var(--blue-600);
-    border:1.5px solid var(--blue-600);
-    border-radius:8px;
-    color:var(--white);
-    font-size:12.5px;
+    background:#ffffff;
+    border:1px solid #bae6fd;
+    color:var(--blue-dark);
+    font-size:12px;
     font-weight:600;
+    padding:5px 10px;
+    border-radius:6px;
     cursor:pointer;
-    box-shadow:0 4px 10px rgba(0, 119, 230, 0.2);
-    transition:all .15s ease;
+    transition:all .12s ease;
   }
   .btn-demo-quick:hover{
-    background:var(--blue-700);
+    background:var(--blue-primary);
+    color:#fff;
+    border-color:var(--blue-primary);
   }
-
-  /* STEP 2: OTP */
-  .back-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    color:var(--ink-500);
-    font-size:13px;
-    text-decoration:none;
+  .btn-demo-direct{
+    background:linear-gradient(135deg, #0077e6 0%, #00a2ff 100%);
+    border:none;
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    padding:5px 12px;
+    border-radius:6px;
     cursor:pointer;
-    margin-bottom:18px;
-    transition:color .15s ease;
+    transition:all .12s ease;
   }
-  .back-btn:hover{ color:var(--blue-600); }
+  .btn-demo-direct:hover{ opacity:0.92; }
 
-  .otp-desc{
-    font-size:13.5px;
-    color:var(--ink-500);
-    line-height:1.5;
-    margin-bottom:20px;
+  .demo-info-row{
+    display:flex;
+    gap:16px;
+    font-size:12px;
+    color:#475569;
+  }
+  .demo-info-row strong{ color:var(--text-dark); }
+
+  /* MODAL OTP */
+  .otp-overlay{
+    position:fixed;
+    top:0; left:0; right:0; bottom:0;
+    background:rgba(2, 43, 89, 0.55);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+    padding:20px;
+  }
+  .otp-overlay.show{ display:flex; }
+  .otp-modal{
+    background:#ffffff;
+    border-radius:20px;
+    padding:32px 28px;
+    width:100%;
+    max-width:380px;
+    box-shadow:0 24px 50px rgba(0, 50, 120, 0.25);
     text-align:center;
   }
-
+  .otp-modal h3{
+    font-size:20px;
+    font-weight:800;
+    color:var(--text-dark);
+    margin-bottom:8px;
+  }
+  .otp-modal p{
+    font-size:13px;
+    color:var(--text-muted);
+    margin-bottom:20px;
+    line-height:1.5;
+  }
   .otp-inputs{
     display:flex;
     gap:8px;
-    margin-bottom:12px;
+    justify-content:center;
+    margin-bottom:20px;
   }
-  .otp-inputs input{
-    width:100%;
-    aspect-ratio:1;
+  .otp-digit{
+    width:44px;
+    height:50px;
     text-align:center;
-    font-size:22px;
+    font-size:20px;
     font-weight:700;
-    border:1.5px solid #dce8f3;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    border:1.5px solid var(--input-border);
     border-radius:10px;
     outline:none;
-    font-family:'Space Grotesk', sans-serif;
-    color:var(--blue-900);
-    transition:all .15s ease;
-  }
-  .otp-inputs input:focus{
-    border-color:var(--cyan-primary);
-    box-shadow:0 0 0 4px rgba(51, 204, 255, 0.2);
-  }
-
-  .otp-meta{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:12.5px;
-    color:var(--ink-500);
-    margin-bottom:18px;
-  }
-  .resend-link{
-    color:var(--blue-600);
-    font-weight:600;
-    cursor:pointer;
-  }
-  .resend-link.disabled{
-    color:var(--ink-400);
-    cursor:default;
-  }
-
-  .btn-skip{
-    width:100%;
-    margin-top:10px;
-    padding:10px;
-    background:transparent;
-    border:1.5px solid #dce8f3;
-    border-radius:10px;
-    color:var(--ink-700);
-    font-size:13px;
-    font-weight:600;
-    cursor:pointer;
-    transition:all .15s ease;
-  }
-  .btn-skip:hover{
     background:#f8fafc;
-    border-color:var(--cyan-primary);
-    color:var(--blue-700);
+  }
+  .otp-digit:focus{
+    border-color:var(--blue-primary);
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(51, 204, 255, 0.25);
   }
 
-  @media (max-width: 960px){
-    .screen{ grid-template-columns:1fr; }
-    .brand{ padding:36px 28px 24px; min-height:auto; text-align:center; }
-    .brand-top{ justify-content:center; }
-    .brand-center{ padding:16px 0; }
-    .brand-illustration{ display:none; }
-    .brand-desc{ margin:0 auto; }
-    .panel{ padding:20px 20px 48px; }
-    .form-card{ padding:34px 24px 30px; }
+  /* RESPONSIVE */
+  @media (max-width: 900px){
+    .auth-wrapper{ grid-template-columns:1fr; max-width:480px; }
+    .left-hero{ display:none; }
+    .right-form-wrap{ border-radius:32px; padding:36px 28px; }
   }
 </style>
 </head>
 <body>
 
-<div class="screen">
+<div class="auth-wrapper">
 
-  <!-- ================= LEFT BRAND PANEL ================= -->
-  <div class="brand">
-    <div class="brand-top">
-      <div class="brand-logo-circle">
-        <!-- Logo tia chá»›p cÃ´ng nghá»‡ sáº¡c/bÃ¡n hÃ ng -->
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M13 2L3 14h8l-2 8 11-13h-8l3-7z"/>
-        </svg>
+  <!-- CỘT TRÁI: MINH HỌA HỆ SINH THÁI GOAN -->
+  <div class="left-hero">
+    <div>
+      <div class="brand-header">
+        <div class="brand-logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h8l-2 8 11-13h-8l3-7z"/></svg>
+        </div>
+        <span class="brand-title">GOAN</span>
       </div>
-      <span class="brand-title">GOAN</span>
-    </div>
 
-    <div class="brand-center">
-      <div class="brand-badge">
-        <span class="dot"></span>
-        Há»‡ sinh thÃ¡i bÃ¡n hÃ ng thÃ´ng minh
-      </div>
-      <h1 class="brand-slogan">
-        Váº­n hÃ nh tinh gá»n<br>
-        <span>Bá»©t phÃ¡ doanh thu</span>
-      </h1>
-      <p class="brand-desc">
-        Giáº£i phÃ¡p quáº£n lÃ½ bÃ¡n hÃ ng Ä‘a kÃªnh tháº¿ há»‡ má»›i káº¿t há»£p thiết bị bán hàng hiá»‡n Ä‘áº¡i vÃ  cÃ´ng nghá»‡ Ä‘iá»‡n toÃ¡n Ä‘Ã¡m mÃ¢y.
-      </p>
-
-      <div class="brand-illustration">
-        <!-- Vector minh há»a quầy thanh toán / quáº§y thanh toÃ¡n cao cáº¥p tÃ´ng tráº¯ng - xanh dÆ°Æ¡ng -->
-        <svg class="illustration-svg" viewBox="0 0 520 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Bá»‡ Ä‘á»©ng cÃ´ng nghá»‡ -->
-          <ellipse cx="260" cy="245" rx="200" ry="24" fill="rgba(0, 119, 230, 0.12)"/>
-          <ellipse cx="260" cy="243" rx="140" ry="14" fill="rgba(51, 204, 255, 0.2)"/>
-
-          <!-- THIáº¾T Bá»Š 1 (TRÃI): MÃ¡y in bill & quÃ©t mÃ£ váº¡ch mÃ u tráº¯ng -->
-          <g transform="translate(60, 80)">
-            <rect x="10" y="20" width="95" height="135" rx="16" fill="#ffffff" stroke="#d5ebfa" stroke-width="2"/>
-            <rect x="22" y="32" width="71" height="42" rx="8" fill="#f0f9ff"/>
-            <circle cx="57.5" cy="53" r="14" fill="var(--cyan-primary)" opacity="0.3"/>
-            <path d="M52 53h11M57.5 47.5v11" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round"/>
-            <rect x="24" y="88" width="67" height="6" rx="3" fill="#0077e6" opacity="0.8"/>
-            <rect x="24" y="100" width="45" height="5" rx="2.5" fill="#94a3b8"/>
-            <circle cx="57.5" cy="130" r="6" fill="#10b981"/>
-            <!-- Giáº¥y in bill trá»“i lÃªn -->
-            <path d="M28 20 V8 H87 V20 Z" fill="#ffffff" stroke="#d5ebfa" stroke-width="1.5"/>
-            <line x1="36" y1="12" x2="60" y2="12" stroke="#94a3b8" stroke-width="1.5"/>
-            <line x1="36" y1="16" x2="78" y2="16" stroke="#cbd5e1" stroke-width="1.5"/>
-          </g>
-
-          <!-- THIáº¾T Bá»Š 2 (GIá»®A): Màn hình mÃ n hÃ¬nh cáº£m á»©ng trung tÃ¢m mÃ u tráº¯ng cá»±c Ä‘áº¹p -->
-          <g transform="translate(175, 20)">
-            <!-- Chân đế kim loáº¡i tráº¯ng -->
-            <path d="M60 185 L75 120 H95 L110 185 Z" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
-            <rect x="40" y="185" width="90" height="16" rx="8" fill="#ffffff" stroke="#d5ebfa" stroke-width="2"/>
-            <!-- ThÃ¢n Màn hình xoay -->
-            <rect x="10" y="20" width="150" height="110" rx="14" fill="#ffffff" stroke="#0077e6" stroke-width="2.5" filter="drop-shadow(0 12px 24px rgba(0, 119, 230, 0.2))"/>
-            <!-- MÃ n hÃ¬nh cáº£m á»©ng xanh gradient -->
-            <rect x="18" y="28" width="134" height="94" rx="8" fill="url(#mainScreenGrad)"/>
-            <!-- Äá»“ há»a hiá»ƒn thá»‹ trÃªn màn hình bán hàng -->
-            <rect x="26" y="36" width="40" height="16" rx="4" fill="#ffffff" opacity="0.9"/>
-            <rect x="72" y="36" width="30" height="7" rx="3.5" fill="#ffffff" opacity="0.6"/>
-            <rect x="72" y="46" width="20" height="5" rx="2.5" fill="#ffffff" opacity="0.4"/>
-            <!-- Biá»ƒu Ä‘á»“ cá»™t mini -->
-            <rect x="28" y="78" width="12" height="30" rx="2" fill="#ffffff" opacity="0.5"/>
-            <rect x="44" y="66" width="12" height="42" rx="2" fill="#33CCFF"/>
-            <rect x="60" y="58" width="12" height="50" rx="2" fill="#ffffff"/>
-            <rect x="76" y="70" width="12" height="38" rx="2" fill="#99FFFF"/>
-            <!-- NÃºt thanh toÃ¡n nhanh trÃ²n -->
-            <circle cx="126" cy="94" r="14" fill="#ffffff"/>
-            <path d="M122 94l3 3 6-6" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </g>
-
-          <!-- THIáº¾T Bá»Š 3 (PHáº¢I): Thiáº¿t bá»‹ quáº¹t thẻ thanh toán cáº§m tay mÃ u tráº¯ng -->
-          <g transform="translate(365, 70)">
-            <rect x="10" y="10" width="85" height="150" rx="18" fill="#ffffff" stroke="#d5ebfa" stroke-width="2"/>
-            <rect x="20" y="22" width="65" height="48" rx="8" fill="#0077e6"/>
-            <!-- MÃ n hÃ¬nh thanh toÃ¡n tháº» -->
-            <text x="32" y="44" fill="#ffffff" font-size="10" font-family="'Space Grotesk',sans-serif" font-weight="700">GOAN PAY</text>
-            <text x="32" y="58" fill="#99FFFF" font-size="9" font-family="'Inter',sans-serif">250.000Ä‘</text>
-            <!-- BÃ n phÃ­m sá»‘ -->
-            <circle cx="28" cy="85" r="4" fill="#e2e8f0"/>
-            <circle cx="42" cy="85" r="4" fill="#e2e8f0"/>
-            <circle cx="56" cy="85" r="4" fill="#e2e8f0"/>
-            <circle cx="28" cy="100" r="4" fill="#e2e8f0"/>
-            <circle cx="42" cy="100" r="4" fill="#e2e8f0"/>
-            <circle cx="56" cy="100" r="4" fill="#e2e8f0"/>
-            <circle cx="28" cy="115" r="4" fill="#e2e8f0"/>
-            <circle cx="42" cy="115" r="4" fill="#e2e8f0"/>
-            <circle cx="56" cy="115" r="4" fill="#e2e8f0"/>
-            <!-- Khe tháº» chip -->
-            <rect x="25" y="138" width="55" height="5" rx="2.5" fill="#33CCFF"/>
-          </g>
-
-          <!-- Defs Gradient -->
-          <defs>
-            <linearGradient id="mainScreenGrad" x1="18" y1="28" x2="152" y2="122" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#0077e6"/>
-              <stop offset="0.5" stop-color="#0099ff"/>
-              <stop offset="1" stop-color="#33CCFF"/>
-            </linearGradient>
-          </defs>
-        </svg>
+      <div class="hero-text-block">
+        <div class="hero-tag">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Hệ sinh thái bán hàng thông minh
+        </div>
+        <h1 class="hero-title">
+          Vận hành tinh gọn<br>
+          <span>Bứt phá doanh thu</span>
+        </h1>
+        <p class="hero-desc">
+          Giải pháp quản lý bán hàng đa kênh thế hệ mới kết hợp thiết bị bán hàng hiện đại và công nghệ điện toán đám mây.
+        </p>
       </div>
     </div>
 
-    <div class="brand-footer">
-      Â© 2026 GOAN Technology â€¢ Hệ thống BÃ¡n HÃ ng Äiá»‡n ToÃ¡n ÄÃ¡m MÃ¢y
+    <!-- MINH HỌA THIẾT BỊ BÁN HÀNG CÔNG NGHỆ CAO -->
+    <div class="hero-illustration">
+      <svg class="pos-station-svg" viewBox="0 0 320 220" fill="none">
+        <ellipse cx="160" cy="190" rx="140" ry="16" fill="url(#floorShad)" opacity="0.4"/>
+        <rect x="100" y="170" width="120" height="14" rx="7" fill="#005bb5" opacity="0.9"/>
+        
+        <!-- THIẾT BỊ 1: Máy in bill -->
+        <g transform="translate(30, 90)">
+          <rect x="0" y="20" width="70" height="60" rx="8" fill="#ffffff" stroke="#bae6fd" stroke-width="2"/>
+          <rect x="10" y="30" width="50" height="6" rx="3" fill="#33CCFF"/>
+          <rect x="15" y="5" width="40" height="18" rx="2" fill="#f0fbff" stroke="#bae6fd" stroke-width="1.5"/>
+          <line x1="20" y1="10" x2="45" y2="10" stroke="#0077e6" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="20" y1="14" x2="38" y2="14" stroke="#0077e6" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="58" cy="62" r="4" fill="#10b981"/>
+        </g>
+
+        <!-- THIẾT BỊ 2: Màn hình bán hàng cảm ứng chính -->
+        <g transform="translate(105, 30)">
+          <rect x="42" y="100" width="26" height="42" rx="4" fill="#dbeafe"/>
+          <rect x="18" y="138" width="74" height="10" rx="5" fill="#0077e6"/>
+          <rect x="0" y="10" width="110" height="92" rx="12" fill="#ffffff" stroke="#bae6fd" stroke-width="2.5"/>
+          <rect x="7" y="17" width="96" height="78" rx="8" fill="url(#screenGrad)"/>
+          <rect x="12" y="22" width="40" height="6" rx="3" fill="#ffffff" opacity="0.9"/>
+          <rect x="12" y="32" width="26" height="18" rx="4" fill="#33CCFF" opacity="0.8"/>
+          <rect x="42" y="32" width="26" height="18" rx="4" fill="#0077e6" opacity="0.8"/>
+          <rect x="12" y="54" width="26" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+          <rect x="42" y="54" width="26" height="18" rx="4" fill="#f59e0b" opacity="0.8"/>
+          <rect x="72" y="22" width="26" height="68" rx="4" fill="#ffffff" opacity="0.25"/>
+          <rect x="76" y="74" width="18" height="12" rx="3" fill="#10b981"/>
+        </g>
+
+        <!-- THIẾT BỊ 3: Máy quẹt thẻ thanh toán -->
+        <g transform="translate(225, 95)">
+          <rect x="0" y="15" width="60" height="68" rx="8" fill="#ffffff" stroke="#bae6fd" stroke-width="2"/>
+          <rect x="8" y="23" width="44" height="24" rx="4" fill="#003d80"/>
+          <rect x="14" y="30" width="22" height="4" rx="2" fill="#33CCFF"/>
+          <circle cx="15" cy="58" r="3" fill="#94a3b8"/>
+          <circle cx="30" cy="58" r="3" fill="#94a3b8"/>
+          <circle cx="45" cy="58" r="3" fill="#94a3b8"/>
+          <circle cx="15" cy="68" r="3" fill="#94a3b8"/>
+          <circle cx="30" cy="68" r="3" fill="#10b981"/>
+          <circle cx="45" cy="68" r="3" fill="#ef4444"/>
+        </g>
+
+        <defs>
+          <radialGradient id="floorShad" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="#005bb5" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#005bb5" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="screenGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#005bb5"/>
+            <stop offset="100%" stop-color="#003d80"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="hero-footer">
+      <span>© 2026 GOAN Technology • Hệ thống Bán Hàng Điện Toán Đám Mây</span>
+      <span style="font-weight:700; color:var(--blue-dark);">Phiên bản v2.6</span>
     </div>
   </div>
 
-  <!-- ================= RIGHT FORM PANEL ================= -->
-  <div class="panel">
-    <div class="form-card">
+  <!-- CỘT PHẢI: FORM ĐĂNG NHẬP -->
+  <div class="right-form-wrap">
+    <div class="card-top">
+      <div class="card-avatar">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z"/></svg>
+      </div>
+      <h2 class="form-header-title">Đăng nhập hệ thống</h2>
+      <p class="form-header-sub">Chào mừng bạn quay trở lại với GOAN</p>
+    </div>
 
-      <!-- STEP 1: ÄÄ‚NG NHáº¬P -->
-      <div class="step active" id="step-login">
-        
-        <div class="card-top">
-          <div class="card-logo">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M13 2L3 14h8l-2 8 11-13h-8l3-7z"/>
-            </svg>
-          </div>
-          <h2 class="card-title">ÄÄƒng nháº­p há»‡ thá»‘ng</h2>
+    <!-- HỘP THÔNG BÁO KHI ĐĂNG XUẤT -->
+    <div class="alert-box" id="logoutAlert">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Bạn đã đăng xuất an toàn khỏi GOAN.</span>
+    </div>
+
+    <!-- FORM ĐĂNG NHẬP -->
+    <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+      <div class="form-group">
+        <label for="emailInput">Tài khoản / Email quản lý</label>
+        <div class="input-icon-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
+          <input class="form-input" id="emailInput" type="text" placeholder="demo@goan.vn hoặc số điện thoại" required>
         </div>
+      </div>
 
-        <div class="alert-box alert-success" id="logoutAlert">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex:none; margin-top:1px;"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Báº¡n Ä‘Ã£ Ä‘Äƒng xuáº¥t an toÃ n khá»i há»‡ thá»‘ng GOAN.</span>
-        </div>
-
-        <form id="loginForm" novalidate>
-          <!-- FIELD TÃ€I KHOáº¢N -->
-          <div class="field">
-            <label for="email">TÃ i khoáº£n</label>
-            <div class="input-wrap" id="emailRow">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8V21h19.2v-1.8c0-3.2-6.4-4.8-9.6-4.8z"/>
-                </svg>
-              </span>
-              <input type="text" id="email" placeholder="Nháº­p tÃ i khoáº£n" autocomplete="username">
-            </div>
-            <div class="field-note" id="emailNote">Vui lÃ²ng nháº­p tÃ i khoáº£n hoáº·c email.</div>
-          </div>
-
-          <!-- FIELD Máº¬T KHáº¨U -->
-          <div class="field">
-            <label for="password">Máº­t kháº©u</label>
-            <div class="input-wrap" id="passwordRow">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-                </svg>
-              </span>
-              <input type="password" id="password" placeholder="Nháº­p máº­t kháº©u" autocomplete="current-password">
-              <button type="button" class="icon-pw-btn" id="togglePw" aria-label="Hiá»‡n máº­t kháº©u">
-                <svg viewBox="0 0 24 24" fill="none" id="eyeIcon">
-                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke="currentColor" stroke-width="1.8"/>
-                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
-                </svg>
-              </button>
-            </div>
-            <div class="field-note" id="pwNote">Máº­t kháº©u pháº£i cÃ³ Ã­t nháº¥t 8 kÃ½ tá»±.</div>
-          </div>
-
-          <!-- GHI NHá»š & QUÃŠN Máº¬T KHáº¨U -->
-          <div class="row-meta">
-            <label class="remember-box">
-              <input type="checkbox" id="rememberMe" checked>
-              Ghi nhá»› Ä‘Äƒng nháº­p
-            </label>
-            <a href="#" class="link-forgot">QuÃªn máº­t kháº©u?</a>
-          </div>
-
-          <!-- NÃšT ÄÄ‚NG NHáº¬P -->
-          <button type="submit" class="btn-submit" id="loginBtn">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            ÄÄƒng nháº­p
+      <div class="form-group">
+        <label for="pwdInput">Mật khẩu</label>
+        <div class="input-icon-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2"/></svg>
+          <input class="form-input" id="pwdInput" type="password" placeholder="Nhập mật khẩu..." required>
+          <button type="button" class="toggle-pwd" id="togglePwdBtn" onclick="togglePasswordVisibility()">
+            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
           </button>
-
-          <div class="alert-box alert-danger" id="lockoutAlert">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex:none; margin-top:2px;"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.6"/></svg>
-            <span id="lockoutText">Sai thÃ´ng tin Ä‘Äƒng nháº­p. Sau 5 láº§n thá»­ khÃ´ng thÃ nh cÃ´ng, tÃ i khoáº£n sáº½ táº¡m khÃ³a 15 phÃºt.</span>
-          </div>
-
-          <!-- KHá»I TÃ€I KHOáº¢N DÃ™NG THá»¬ (DEMO) -->
-          <div class="demo-box">
-            <div class="demo-box-header">
-              <span class="demo-badge">TÃ€I KHOáº¢N DÃ™NG THá»¬</span>
-              <span class="demo-sub">Tráº£i nghiá»‡m ngay</span>
-            </div>
-            <div class="demo-credentials">
-              <div>TÃ i khoáº£n: <strong>demo@goan.vn</strong></div>
-              <div>Máº­t kháº©u: <strong>12345678</strong></div>
-            </div>
-            <div class="demo-actions">
-              <button type="button" class="btn-demo-fill" id="btnFillDemo" title="Tá»± Ä‘á»™ng Ä‘iá»n tÃ i khoáº£n demo vÃ o form">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" stroke="currentColor" stroke-width="2"/><rect x="8" y="2" width="8" height="4" rx="1" stroke="currentColor" stroke-width="2"/></svg>
-                Äiá»n nhanh
-              </button>
-              <button type="button" class="btn-demo-quick" id="btnQuickDemo" title="ÄÄƒng nháº­p ngay vÃ o GOAN">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-                Vào bán hàng
-              </button>
-            </div>
-          </div>
-        </form>
-
+        </div>
       </div>
 
-      <!-- STEP 2: OTP / MFA -->
-      <div class="step" id="step-otp">
-        <a class="back-btn" id="backToLogin">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Quay láº¡i Ä‘Äƒng nháº­p
-        </a>
-
-        <div class="card-top">
-          <div class="card-logo">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
-            </svg>
-          </div>
-          <h2 class="card-title">XÃ¡c thá»±c hai lá»›p</h2>
-        </div>
-
-        <p class="otp-desc">Nháº­p mÃ£ gá»“m 6 chá»¯ sá»‘ Ä‘Ã£ gá»­i tá»›i <strong id="otpTarget" style="color:var(--blue-700);">email cá»§a báº¡n</strong> Ä‘á»ƒ hoÃ n táº¥t.</p>
-
-        <div class="otp-inputs">
-          <input type="text" maxlength="1" inputmode="numeric">
-          <input type="text" maxlength="1" inputmode="numeric">
-          <input type="text" maxlength="1" inputmode="numeric">
-          <input type="text" maxlength="1" inputmode="numeric">
-          <input type="text" maxlength="1" inputmode="numeric">
-          <input type="text" maxlength="1" inputmode="numeric">
-        </div>
-
-        <div class="otp-meta">
-          <span>Háº¿t háº¡n sau: <strong id="otpTimer" style="color:var(--blue-700);">02:00</strong></span>
-          <span class="resend-link disabled" id="resendBtn">Gá»­i láº¡i mÃ£</span>
-        </div>
-
-        <button type="button" class="btn-submit" id="verifyBtn">
-          XÃ¡c nháº­n vÃ  vÃ o GOAN
-        </button>
-
-        <button type="button" class="btn-skip" id="btnSkipOtp">
-          Bá» qua bÆ°á»›c nÃ y & Vào bán hàng
-        </button>
+      <div class="form-extra">
+        <label class="remember-wrap">
+          <input type="checkbox" id="rememberMe" checked>
+          <span>Ghi nhớ đăng nhập</span>
+        </label>
+        <a href="javascript:void(0)" class="forgot-link" onclick="alert('Vui lòng liên hệ quản trị viên: 0901 234 567 để cấp lại mật khẩu!')">Quên mật khẩu?</a>
       </div>
 
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <span>Đăng nhập hệ thống</span>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+
+    <!-- HỘP TÀI KHOẢN DÙNG THỬ (DEMO ACCOUNT) -->
+    <div class="demo-account-box">
+      <div class="demo-header">
+        <span class="demo-badge">Tài khoản dùng thử</span>
+        <div class="demo-actions">
+          <button type="button" class="btn-demo-quick" onclick="fillDemoCredentials()">Điền nhanh</button>
+          <button type="button" class="btn-demo-direct" onclick="loginDirectToPOS()">Vào bán hàng</button>
+        </div>
+      </div>
+      <div class="demo-info-row">
+        <span>Email: <strong>demo@goan.vn</strong></span>
+        <span>Mật khẩu: <strong>12345678</strong></span>
+      </div>
     </div>
   </div>
 
 </div>
 
+<!-- MODAL XÁC THỰC OTP -->
+<div class="otp-overlay" id="otpOverlay">
+  <div class="otp-modal">
+    <h3>Xác thực 2 bước (OTP)</h3>
+    <p>Mã bảo mật gồm 6 chữ số đã được tạo cho tài khoản demo. Mã mặc định là: <b style="color:#0077e6; font-size:15px;">123456</b></p>
+    
+    <div class="otp-inputs">
+      <input class="otp-digit" maxlength="1" id="otp1" value="1">
+      <input class="otp-digit" maxlength="1" id="otp2" value="2">
+      <input class="otp-digit" maxlength="1" id="otp3" value="3">
+      <input class="otp-digit" maxlength="1" id="otp4" value="4">
+      <input class="otp-digit" maxlength="1" id="otp5" value="5">
+      <input class="otp-digit" maxlength="1" id="otp6" value="6">
+    </div>
+
+    <button class="btn-submit" style="width:100%; margin-bottom:10px;" onclick="confirmOtpAndRedirect()">
+      Xác nhận và vào GOAN
+    </button>
+    
+    <button type="button" style="background:none; border:none; color:#64748b; font-size:12.5px; cursor:pointer; text-decoration:underline;" onclick="confirmOtpAndRedirect()">
+      Bỏ qua bước này & vào bán hàng
+    </button>
+  </div>
+</div>
+
 <script>
-  // TÃ i khoáº£n demo máº·c Ä‘á»‹nh
-  const DEMO_ACCOUNT = {
+// KIỂM TRA QUERY PARAM ĐĂNG XUẤT
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('logout') === 'true') {
+  document.getElementById('logoutAlert').classList.add('show');
+}
+
+// ẨN / HIỆN MẬT KHẨU
+function togglePasswordVisibility() {
+  const pwd = document.getElementById('pwdInput');
+  const eye = document.getElementById('eyeIcon');
+  if (pwd.type === 'password') {
+    pwd.type = 'text';
+    eye.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" stroke-width="2"/><line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2"/>`;
+  } else {
+    pwd.type = 'password';
+    eye.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>`;
+  }
+}
+
+// ĐIỀN NHANH TÀI KHOẢN DEMO
+function fillDemoCredentials() {
+  document.getElementById('emailInput').value = 'demo@goan.vn';
+  document.getElementById('pwdInput').value = '12345678';
+  document.getElementById('logoutAlert').classList.remove('show');
+}
+
+// CHUYỂN HƯỚNG VÀO TRANG BÁN HÀNG
+function redirectToPOS(user) {
+  const userData = user || {
     email: 'demo@goan.vn',
-    password: '12345678',
-    name: 'Chá»§ quÃ¡n Demo',
-    role: 'Quáº£n lÃ½ cá»­a hÃ ng',
-    shop: 'GOAN Coffee & Tea (Chi nhÃ¡nh 1)',
-    otp: '123456'
+    name: 'Chủ quán Demo',
+    role: 'Quản lý cửa hàng',
+    shop: 'GOAN Coffee & Tea'
   };
+  try {
+    localStorage.setItem('goan_user', JSON.stringify(userData));
+  } catch(e){}
+  window.location.href = 'goan-pos.html';
+}
 
-  const loginForm = document.getElementById('loginForm');
-  const emailInput = document.getElementById('email');
-  const pwInput = document.getElementById('password');
-  const emailRow = document.getElementById('emailRow');
-  const passwordRow = document.getElementById('passwordRow');
-  const emailNote = document.getElementById('emailNote');
-  const pwNote = document.getElementById('pwNote');
-  const loginBtn = document.getElementById('loginBtn');
-  const lockoutAlert = document.getElementById('lockoutAlert');
-  const lockoutText = document.getElementById('lockoutText');
+// VÀO THẲNG BÁN HÀNG
+function loginDirectToPOS() {
+  fillDemoCredentials();
+  redirectToPOS();
+}
 
-  const stepLogin = document.getElementById('step-login');
-  const stepOtp = document.getElementById('step-otp');
-  const backToLogin = document.getElementById('backToLogin');
-  const otpBoxes = document.querySelectorAll('.otp-inputs input');
+// XỬ LÝ SUBMIT FORM
+function handleLoginSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('emailInput').value.trim();
+  const pwd = document.getElementById('pwdInput').value;
 
-  // Kiá»ƒm tra thÃ´ng bÃ¡o Ä‘Äƒng xuáº¥t
-  const urlParams = new URLSearchParams(window.location.search);
-  if(urlParams.get('logout') === 'true'){
-    const logoutAlert = document.getElementById('logoutAlert');
-    if(logoutAlert) logoutAlert.classList.add('show');
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-
-  // HÃ m chuyá»ƒn hÆ°á»›ng sang goan-pos.html
-  function setSessionAndRedirect(userObj){
-    const emailVal = userObj.email || DEMO_ACCOUNT.email;
-    const isDemo = emailVal.toLowerCase().includes('demo') || emailVal === DEMO_ACCOUNT.email;
-    const sessionData = {
-      email: emailVal,
-      name: userObj.name || (isDemo ? DEMO_ACCOUNT.name : 'Quáº£n lÃ½ cá»­a hÃ ng'),
-      role: userObj.role || DEMO_ACCOUNT.role,
-      shop: userObj.shop || DEMO_ACCOUNT.shop,
-      loginTime: new Date().toLocaleString('vi-VN')
-    };
-    try {
-      localStorage.setItem('goan_user', JSON.stringify(sessionData));
-    } catch(e) {
-      console.warn('LocalStorage error:', e);
-    }
-    window.location.href = 'goan-pos.html';
-  }
-
-  // NÃºt Äiá»n nhanh Demo
-  document.getElementById('btnFillDemo').addEventListener('click', () => {
-    emailInput.value = DEMO_ACCOUNT.email;
-    pwInput.value = DEMO_ACCOUNT.password;
-    emailRow.classList.remove('error');
-    emailNote.classList.remove('show');
-    passwordRow.classList.remove('error');
-    pwNote.classList.remove('show');
-    lockoutAlert.classList.remove('show');
-    pwInput.focus();
-  });
-
-  // NÃºt Vào bán hàng tá»« Demo box
-  document.getElementById('btnQuickDemo').addEventListener('click', () => {
-    emailInput.value = DEMO_ACCOUNT.email;
-    pwInput.value = DEMO_ACCOUNT.password;
-    setSessionAndRedirect(DEMO_ACCOUNT);
-  });
-
-  // NÃºt Bá» qua OTP vÃ  Vào bán hàng
-  document.getElementById('btnSkipOtp').addEventListener('click', () => {
-    setSessionAndRedirect({
-      email: emailInput.value.trim() || DEMO_ACCOUNT.email
+  if (email === 'demo@goan.vn' || email === 'admin' || email.includes('demo')) {
+    document.getElementById('otpOverlay').classList.add('show');
+  } else {
+    redirectToPOS({
+      email: email,
+      name: email.split('@')[0] || 'Chủ quán',
+      role: 'Thu ngân / Quản lý',
+      shop: 'GOAN Coffee & Tea'
     });
-  });
-
-  let failedAttempts = 0;
-  const MAX_ATTEMPTS = 5;
-
-  // Toggle xem máº­t kháº©u
-  document.getElementById('togglePw').addEventListener('click', () => {
-    const isPw = pwInput.type === 'password';
-    pwInput.type = isPw ? 'text' : 'password';
-  });
-
-  loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    let valid = true;
-
-    if(!emailInput.value.trim()){
-      emailRow.classList.add('error');
-      emailNote.classList.add('show');
-      valid = false;
-    } else {
-      emailRow.classList.remove('error');
-      emailNote.classList.remove('show');
-    }
-
-    if(!pwInput.value || pwInput.value.length < 8){
-      passwordRow.classList.add('error');
-      pwNote.classList.add('show');
-      valid = false;
-    } else {
-      passwordRow.classList.remove('error');
-      pwNote.classList.remove('show');
-    }
-
-    if(!valid){
-      loginBtn.classList.add('shake');
-      setTimeout(()=> loginBtn.classList.remove('shake'), 320);
-      failedAttempts++;
-      if(failedAttempts >= 3){
-        const remaining = Math.max(MAX_ATTEMPTS - failedAttempts, 0);
-        lockoutText.textContent = remaining > 0
-          ? `Sai thÃ´ng tin Ä‘Äƒng nháº­p (cÃ²n ${remaining} láº§n thá»­). Sau ${MAX_ATTEMPTS} láº§n liÃªn tiáº¿p, tÃ i khoáº£n sáº½ táº¡m khÃ³a 15 phÃºt.`
-          : `TÃ i khoáº£n Ä‘Ã£ táº¡m khÃ³a 15 phÃºt do Ä‘Äƒng nháº­p sai quÃ¡ sá»‘ láº§n cho phÃ©p. Vui lÃ²ng thá»­ láº¡i sau.`;
-        lockoutAlert.classList.add('show');
-      }
-      return;
-    }
-
-    lockoutAlert.classList.remove('show');
-    document.getElementById('otpTarget').textContent = emailInput.value.includes('@')
-      ? emailInput.value
-      : 'sá»‘ Ä‘iá»‡n thoáº¡i ' + emailInput.value;
-
-    // Tá»± Ä‘á»™ng Ä‘iá»n mÃ£ demo náº¿u lÃ  demo@goan.vn
-    if(emailInput.value.trim().toLowerCase() === DEMO_ACCOUNT.email){
-      const digits = DEMO_ACCOUNT.otp.split('');
-      otpBoxes.forEach((box, i) => { box.value = digits[i] || ''; });
-    } else {
-      otpBoxes.forEach(box => box.value = '');
-    }
-
-    stepLogin.classList.remove('active');
-    stepOtp.classList.add('active');
-    startOtpTimer();
-    otpBoxes[0].focus();
-  });
-
-  backToLogin.addEventListener('click', () => {
-    stepOtp.classList.remove('active');
-    stepLogin.classList.add('active');
-  });
-
-  // Tá»± Ä‘á»™ng nháº£y Ã´ OTP
-  otpBoxes.forEach((box, i) => {
-    box.addEventListener('input', () => {
-      box.value = box.value.replace(/[^0-9]/g, '');
-      if(box.value && i < otpBoxes.length - 1){
-        otpBoxes[i+1].focus();
-      }
-    });
-    box.addEventListener('keydown', (e) => {
-      if(e.key === 'Backspace' && !box.value && i > 0){
-        otpBoxes[i-1].focus();
-      }
-    });
-  });
-
-  // Äáº¿m ngÆ°á»£c OTP
-  let seconds = 120;
-  const otpTimerEl = document.getElementById('otpTimer');
-  const resendBtn = document.getElementById('resendBtn');
-  let timerId;
-
-  function startOtpTimer(){
-    seconds = 120;
-    resendBtn.classList.add('disabled');
-    clearInterval(timerId);
-    timerId = setInterval(() => {
-      seconds--;
-      const m = String(Math.floor(seconds/60)).padStart(2,'0');
-      const s = String(seconds%60).padStart(2,'0');
-      otpTimerEl.textContent = `${m}:${s}`;
-      if(seconds <= 0){
-        clearInterval(timerId);
-        resendBtn.classList.remove('disabled');
-        otpTimerEl.textContent = '00:00';
-      }
-    }, 1000);
   }
+}
 
-  resendBtn.addEventListener('click', () => {
-    if(resendBtn.classList.contains('disabled')) return;
-    startOtpTimer();
-  });
+// XÁC NHẬN OTP
+function confirmOtpAndRedirect() {
+  redirectToPOS();
+}
 
-  document.getElementById('verifyBtn').addEventListener('click', () => {
-    const code = Array.from(otpBoxes).map(b => b.value).join('');
-    if(code.length < 6){
-      alert('Vui lÃ²ng nháº­p Ä‘á»§ 6 chá»¯ sá»‘ mÃ£ OTP (MÃ£ demo: 123456)');
-      return;
+// TỰ ĐỘNG CHUYỂN Ô KHI NHẬP OTP
+const otpInputs = document.querySelectorAll('.otp-digit');
+otpInputs.forEach((input, index) => {
+  input.addEventListener('input', (e) => {
+    if (e.target.value.length === 1 && index < otpInputs.length - 1) {
+      otpInputs[index + 1].focus();
     }
-    const verifyBtn = document.getElementById('verifyBtn');
-    verifyBtn.textContent = 'Äang xÃ¡c thá»±c & vÃ o há»‡ thá»‘ng...';
-    verifyBtn.disabled = true;
-    setTimeout(() => {
-      setSessionAndRedirect({
-        email: emailInput.value.trim() || DEMO_ACCOUNT.email
-      });
-    }, 350);
   });
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+      otpInputs[index - 1].focus();
+    }
+  });
+});
 </script>
-
 </body>
 </html>
-
-
