@@ -1,6 +1,6 @@
-/**
- * GOAN POS Web Server (Zero-Dependency Node.js Server)
- * Dễ dàng chạy cục bộ và deploy trực tiếp lên Render.com (Web Service / Static)
+﻿/**
+ * GOAN Web Server (Zero-Dependency Node.js Server)
+ * Dá»… dÃ ng cháº¡y cá»¥c bá»™ vÃ  deploy trá»±c tiáº¿p lÃªn Render.com (Web Service / Static)
  */
 const http = require('http');
 const fs = require('fs');
@@ -28,13 +28,13 @@ const server = http.createServer((req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let pathname = decodeURIComponent(parsedUrl.pathname);
 
-  // Xử lý các route mặc định
+  // Xá»­ lÃ½ cÃ¡c route máº·c Ä‘á»‹nh
   if (pathname === '/' || pathname === '/login') {
     pathname = '/index.html';
   } else if (pathname === '/pos') {
     pathname = '/goan-pos.html';
   } else if (!path.extname(pathname)) {
-    // Nếu truy cập không đuôi mở rộng, kiểm tra xem có file .html tương ứng không
+    // Náº¿u truy cáº­p khÃ´ng Ä‘uÃ´i má»Ÿ rá»™ng, kiá»ƒm tra xem cÃ³ file .html tÆ°Æ¡ng á»©ng khÃ´ng
     if (fs.existsSync(path.join(ROOT_DIR, pathname + '.html'))) {
       pathname += '.html';
     }
@@ -42,7 +42,7 @@ const server = http.createServer((req, res) => {
 
   const safePath = path.normalize(path.join(ROOT_DIR, pathname));
 
-  // Bảo vệ chống path traversal
+  // Báº£o vá»‡ chá»‘ng path traversal
   if (!safePath.startsWith(ROOT_DIR)) {
     res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('403 Forbidden');
@@ -51,7 +51,7 @@ const server = http.createServer((req, res) => {
 
   fs.stat(safePath, (err, stats) => {
     if (err || !stats.isFile()) {
-      // Fallback về index.html nếu không tìm thấy file
+      // Fallback vá» index.html náº¿u khÃ´ng tÃ¬m tháº¥y file
       const indexPath = path.join(ROOT_DIR, 'index.html');
       fs.readFile(indexPath, (readErr, content) => {
         if (readErr) {
@@ -68,7 +68,7 @@ const server = http.createServer((req, res) => {
     const ext = path.extname(safePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
-    // Đặt cache cho ảnh tĩnh
+    // Äáº·t cache cho áº£nh tÄ©nh
     const headers = { 'Content-Type': contentType };
     if (['.jpg', '.jpeg', '.png', '.svg', '.webp', '.ico'].includes(ext)) {
       headers['Cache-Control'] = 'public, max-age=86400';
@@ -81,9 +81,10 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`=============================================`);
-  console.log(`🚀 GOAN POS Web Server đang chạy tại:`);
-  console.log(`👉 http://localhost:${PORT}`);
-  console.log(`👉 Đăng nhập: http://localhost:${PORT}/goan-login.html`);
-  console.log(`👉 Bán hàng POS: http://localhost:${PORT}/goan-pos.html`);
+  console.log(`ðŸš€ GOAN Web Server Ä‘ang cháº¡y táº¡i:`);
+  console.log(`ðŸ‘‰ http://localhost:${PORT}`);
+  console.log(`ðŸ‘‰ ÄÄƒng nháº­p: http://localhost:${PORT}/goan-login.html`);
+  console.log(`ðŸ‘‰ BÃ¡n hÃ ng POS: http://localhost:${PORT}/goan-pos.html`);
   console.log(`=============================================`);
 });
+
