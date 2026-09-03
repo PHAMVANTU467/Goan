@@ -611,6 +611,108 @@
   .badge-status.danger{ background:#fee2e2; color:#dc2626; }
   .badge-status.info{ background:#e0f2fe; color:#0284c7; }
 
+  /* ============= BỐ CỤC PHÂN CHIA SẢN PHẨM THEO DANH MỤC ============= */
+  .subnav-tabs{
+    display:flex; gap:6px; margin-bottom:14px; background:#e2e8f0; padding:4px;
+    border-radius:10px; width:fit-content;
+  }
+  .subnav-btn{
+    padding:7px 16px; border-radius:7px; border:none; background:none;
+    font-size:13px; font-weight:600; color:#475569; cursor:pointer;
+    font-family:'Plus Jakarta Sans', sans-serif; transition:all .15s ease;
+  }
+  .subnav-btn:hover{ color:var(--blue-900); }
+  .subnav-btn.active{
+    background:#ffffff; color:var(--blue-700); font-weight:700;
+    box-shadow:0 2px 6px rgba(0,0,0,0.06);
+  }
+
+  .category-split-layout{
+    display:flex; gap:16px; flex:1; min-height:0; overflow:hidden;
+  }
+  .category-sidebar{
+    width:270px; flex:none; background:#ffffff; border:1.5px solid var(--line);
+    border-radius:12px; display:flex; flex-direction:column; overflow:hidden;
+    box-shadow:0 2px 8px rgba(0, 60, 130, 0.03);
+  }
+  .category-sidebar-header{
+    padding:12px 14px; background:#f4faff; border-bottom:1px solid var(--line);
+    font-size:12px; font-weight:700; color:var(--blue-900); text-transform:uppercase;
+    letter-spacing:0.5px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .category-sidebar-list{
+    flex:1; overflow-y:auto; padding:8px; display:flex; flex-direction:column; gap:4px;
+  }
+  .cat-item-btn{
+    width:100%; padding:10px 12px; border-radius:8px; border:1px solid transparent;
+    background:none; text-align:left; cursor:pointer; display:flex; align-items:center;
+    justify-content:space-between; font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:13px; font-weight:600; color:var(--ink-800); transition:all .15s ease;
+  }
+  .cat-item-btn:hover{
+    background:#f0f9ff; color:var(--blue-600);
+  }
+  .cat-item-btn.active{
+    background:#e0f2fe; border-color:#bae6fd; color:var(--blue-700); font-weight:700;
+  }
+  .cat-item-left{
+    display:flex; align-items:center; gap:8px; min-width:0;
+  }
+  .cat-color-dot{
+    width:10px; height:10px; border-radius:50%; flex:none;
+  }
+  .cat-name-text{
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .cat-badge-count{
+    font-size:11px; font-weight:700; padding:2px 7px; border-radius:100px;
+    background:#e2e8f0; color:#475569; flex:none;
+  }
+  .cat-item-btn.active .cat-badge-count{
+    background:var(--blue-600); color:#ffffff;
+  }
+  .category-sidebar-footer{
+    padding:10px; border-top:1px solid var(--line); background:#fafcff;
+  }
+  .btn-sidebar-add-cat{
+    width:100%; padding:8px; border-radius:8px; border:1px dashed #93c5fd;
+    background:#f0f9ff; color:var(--blue-600); font-size:12.5px; font-weight:700;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;
+    transition:all .15s ease;
+  }
+  .btn-sidebar-add-cat:hover{
+    background:#e0f2fe; border-color:var(--blue-600);
+  }
+
+  .category-main-panel{
+    flex:1; display:flex; flex-direction:column; min-width:0; gap:12px;
+  }
+  .category-info-card{
+    background:#ffffff; border:1.5px solid var(--line); border-radius:12px;
+    padding:12px 16px; display:flex; justify-content:space-between; align-items:center;
+    box-shadow:0 2px 6px rgba(0, 60, 130, 0.03); flex-wrap:wrap; gap:10px;
+  }
+  .cat-info-left h3{
+    font-size:15.5px; font-weight:800; color:var(--blue-900); display:flex; align-items:center; gap:8px;
+  }
+  .cat-info-left p{
+    font-size:12px; color:var(--ink-600); margin-top:3px;
+  }
+  .cat-toolbar{
+    display:flex; align-items:center; gap:10px;
+  }
+  .cat-search-box{
+    position:relative; display:flex; align-items:center;
+  }
+  .cat-search-box input{
+    padding:7px 10px 7px 30px; border:1.5px solid var(--line); border-radius:8px;
+    font-size:12.5px; width:220px; outline:none; font-family:'Plus Jakarta Sans', sans-serif;
+  }
+  .cat-search-box input:focus{ border-color:var(--cyan-primary); }
+  .cat-search-box svg{
+    position:absolute; left:9px; width:15px; height:15px; color:var(--ink-400); pointer-events:none;
+  }
+
   /* ============= MODALS & DIALOGS ============= */
   .modal-overlay{
     position:fixed; top:0; left:0; right:0; bottom:0;
@@ -931,57 +1033,148 @@
       </aside>
     </section>
 
-    <!-- 2. TRANG SẢN PHẨM -->
+    <!-- 2. TRANG SẢN PHẨM & DANH MỤC -->
     <section class="page" id="page-sanpham">
       <div class="module-view">
         <div class="module-header">
           <div class="module-title-wrap">
-            <h2>Quản lý danh mục & sản phẩm</h2>
-            <p>Dữ liệu tự động đồng bộ thời gian thực với trang Bán hàng và Kho hàng.</p>
+            <h2>Quản lý Thực đơn & Danh mục sản phẩm</h2>
+            <p>Phân loại món theo nhóm thực đơn, quản lý giá bán, đơn vị tính và định mức tồn kho.</p>
           </div>
           <div class="module-actions">
+            <button class="btn-outline" onclick="openCategoryModal()" style="border-color:var(--blue-600); color:var(--blue-700); font-weight:700;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              + Thêm danh mục
+            </button>
             <button class="btn-primary-action" onclick="openProductModal()">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              Thêm sản phẩm mới
+              + Thêm sản phẩm
             </button>
           </div>
         </div>
 
+        <!-- SUB-NAV CHUYỂN ĐỔI CHẾ ĐỘ XEM -->
+        <div class="subnav-tabs">
+          <button class="subnav-btn active" id="btnSubTabProducts" onclick="switchProductSubTab('products')">
+            📦 Sản phẩm theo Danh mục
+          </button>
+          <button class="subnav-btn" id="btnSubTabCategories" onclick="switchProductSubTab('categories')">
+            📑 Quản lý Danh mục thực đơn
+          </button>
+        </div>
+
+        <!-- THẺ KPI TỔNG QUAN -->
         <div class="kpi-row">
           <div class="kpi-card">
             <span class="k-label">Tổng mặt hàng</span>
             <span class="k-value" id="kpiTotalProds">0</span>
-            <span class="k-sub">Đang hoạt động</span>
+            <span class="k-sub">Đang bán trong menu</span>
           </div>
           <div class="kpi-card">
-            <span class="k-label">Danh mục</span>
+            <span class="k-label">Số danh mục</span>
             <span class="k-value" id="kpiTotalCats">0</span>
-            <span class="k-sub">Phân nhóm thực đơn</span>
+            <span class="k-sub">Nhóm món thực đơn</span>
           </div>
           <div class="kpi-card">
             <span class="k-label">Giá trung bình</span>
             <span class="k-value" id="kpiAvgPrice">0đ</span>
-            <span class="k-sub">Theo menu hiện tại</span>
+            <span class="k-sub">Trên toàn thực đơn</span>
+          </div>
+          <div class="kpi-card">
+            <span class="k-label">Tổng tồn thực tế</span>
+            <span class="k-value" id="kpiTotalStockInMenu">0</span>
+            <span class="k-sub">Sản phẩm sẵn sàng bán</span>
           </div>
         </div>
 
-        <div class="table-container">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Ảnh</th>
-                <th>Mã SP</th>
-                <th>Tên sản phẩm</th>
-                <th>Danh mục</th>
-                <th>ĐVT</th>
-                <th>Giá bán</th>
-                <th>Tồn kho</th>
-                <th>Thao tác</th>
-              </tr>
-            </thead>
-            <tbody id="productTableBody"></tbody>
-          </table>
+        <!-- CHẾ ĐỘ 1: SẢN PHẨM PHÂN CHIA THEO DANH MỤC (MASTER-DETAIL) -->
+        <div id="viewProductByCat" class="category-split-layout">
+          <!-- CỘT TRÁI: DANH SÁCH DANH MỤC -->
+          <aside class="category-sidebar">
+            <div class="category-sidebar-header">
+              <span>Danh mục thực đơn</span>
+              <span id="catSidebarCount" style="font-size:11px; background:#e0f2fe; color:var(--blue-700); padding:1px 6px; border-radius:10px;">0 nhóm</span>
+            </div>
+            <div class="category-sidebar-list" id="catSidebarList">
+              <!-- Render danh mục dạng buttons tại đây -->
+            </div>
+            <div class="category-sidebar-footer">
+              <button class="btn-sidebar-add-cat" onclick="openCategoryModal()">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Thêm danh mục mới
+              </button>
+            </div>
+          </aside>
+
+          <!-- CỘT PHẢI: BẢNG SẢN PHẨM CỦA DANH MỤC ĐANG CHỌN -->
+          <div class="category-main-panel">
+            <div class="category-info-card">
+              <div class="cat-info-left">
+                <h3 id="currentCatViewTitle">Tất cả sản phẩm</h3>
+                <p id="currentCatViewDesc">Hiển thị toàn bộ thực đơn đồ uống và thức ăn của cửa hàng.</p>
+              </div>
+              <div class="cat-toolbar">
+                <div class="cat-search-box">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  <input type="text" placeholder="Tìm kiếm món trong danh mục..." id="catProdSearchInput">
+                </div>
+                <button class="btn-primary-action" style="padding:7px 12px; font-size:12.5px;" onclick="openProductModalForCurrentCat()">
+                  + Thêm vào nhóm này
+                </button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width:55px;">Ảnh</th>
+                    <th style="width:100px;">Mã SKU</th>
+                    <th>Tên món / Sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th style="width:70px;">ĐVT</th>
+                    <th style="width:110px;">Giá bán</th>
+                    <th style="width:110px;">Tồn kho</th>
+                    <th style="width:120px; text-align:center;">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="productTableBody"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
+
+        <!-- CHẾ ĐỘ 2: QUẢN LÝ DANH MỤC THỰC ĐƠN (CRUD DANH MỤC) -->
+        <div id="viewCategoryCRUD" style="display:none; flex-direction:column; flex:1; min-height:0;">
+          <div class="category-info-card" style="margin-bottom:12px;">
+            <div>
+              <h3 style="font-size:16px; font-weight:800; color:var(--blue-900);">Quản lý danh sách nhóm thực đơn</h3>
+              <p style="font-size:12.5px; color:var(--ink-600); margin-top:2px;">Tạo mới, chỉnh sửa màu sắc, thứ tự hiển thị của các nhóm đồ uống trên máy bán hàng.</p>
+            </div>
+            <button class="btn-primary-action" onclick="openCategoryModal()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              + Tạo danh mục mới
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:90px;">Mã nhóm</th>
+                  <th style="width:220px;">Tên danh mục</th>
+                  <th>Mô tả nhóm thực đơn</th>
+                  <th style="width:110px; text-align:center;">Số sản phẩm</th>
+                  <th style="width:90px; text-align:center;">Thứ tự</th>
+                  <th style="width:130px; text-align:center;">Trạng thái</th>
+                  <th style="width:130px; text-align:center;">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="categoryTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1385,8 +1578,9 @@
         </button>
       </div>
       <div class="modal-body">
+        <input type="hidden" id="fProdIsEdit" value="false">
         <div class="form-group">
-          <label>Mã sản phẩm</label>
+          <label>Mã sản phẩm / SKU</label>
           <input class="form-control" id="fProdCode" placeholder="HH0000...">
         </div>
         <div class="form-group">
@@ -1395,18 +1589,14 @@
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
           <div class="form-group">
-            <label>Danh mục</label>
+            <label>Danh mục thực đơn (*)</label>
             <select class="form-control" id="fProdCat">
-              <option value="Nước Ép Trái Cây Tươi">Nước Ép Trái Cây Tươi</option>
-              <option value="Thanh Nhiệt">Thanh Nhiệt</option>
-              <option value="Cà Phê Năng Lượng">Cà Phê Năng Lượng</option>
-              <option value="Thức Uống Khác">Thức Uống Khác</option>
-              <option value="Thức Ăn">Thức Ăn</option>
+              <!-- Nạp động 100% từ db.categories -->
             </select>
           </div>
           <div class="form-group">
             <label>Đơn vị tính</label>
-            <input class="form-control" id="fProdUnit" value="Ly">
+            <input class="form-control" id="fProdUnit" value="Ly" placeholder="Ly, Chai, Tô, Cái...">
           </div>
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
@@ -1415,7 +1605,7 @@
             <input class="form-control" type="number" id="fProdPrice" placeholder="30000">
           </div>
           <div class="form-group">
-            <label>Tồn kho ban đầu</label>
+            <label>Số lượng tồn kho</label>
             <input class="form-control" type="number" id="fProdStock" value="50">
           </div>
         </div>
@@ -1423,6 +1613,58 @@
       <div class="modal-footer">
         <button class="btn-outline" onclick="closeModal('modalProduct')">Hủy</button>
         <button class="btn-primary-action" onclick="saveProductForm()">Lưu sản phẩm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: THÊM / SỬA DANH MỤC THỰC ĐƠN -->
+  <div class="modal-overlay" id="modalCategory">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalCategoryTitle">Thêm danh mục thực đơn mới</h3>
+        <button class="modal-close-btn" onclick="closeModal('modalCategory')">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="fCatId">
+        <div class="form-group">
+          <label>Tên nhóm danh mục (*)</label>
+          <input class="form-control" id="fCatName" placeholder="Ví dụ: Trà Trái Cây Nhiệt Đới, Bánh Ngọt Tráng Miệng...">
+        </div>
+        <div class="form-group">
+          <label>Mô tả nhóm thực đơn</label>
+          <input class="form-control" id="fCatDesc" placeholder="Mô tả tóm tắt về nhóm sản phẩm này...">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label>Thứ tự hiển thị</label>
+            <input class="form-control" type="number" id="fCatSort" value="1" min="1">
+          </div>
+          <div class="form-group">
+            <label>Màu nhận diện</label>
+            <select class="form-control" id="fCatColor">
+              <option value="#0077e6">🔵 Xanh dương công nghệ</option>
+              <option value="#854d0e">🟤 Nâu đậm Cà phê</option>
+              <option value="#15803d">🟢 Xanh lá Thanh nhiệt</option>
+              <option value="#ea580c">🟠 Cam tươi Nước ép</option>
+              <option value="#b91c1c">🔴 Đỏ Thức ăn ấm nóng</option>
+              <option value="#7c3aed">🟣 Tím Thảo mộc</option>
+              <option value="#0d9488">🔷 Xanh ngọc sảng khoái</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Trạng thái hoạt động</label>
+          <select class="form-control" id="fCatStatus">
+            <option value="active">Đang kinh doanh (Hiển thị bán hàng)</option>
+            <option value="inactive">Tạm ngưng (Ẩn khỏi màn hình bán)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modalCategory')">Hủy</button>
+        <button class="btn-primary-action" onclick="saveCategoryForm()">Lưu danh mục</button>
       </div>
     </div>
   </div>
@@ -1591,8 +1833,17 @@ const DEFAULT_NOTIFS = [
   }
 ];
 
+const DEFAULT_CATEGORIES = [
+  {id:'CAT01', name:'Cà Phê Năng Lượng', desc:'Cà phê hạt rang mộc, cà phê muối, espresso đậm đà', sortOrder:1, status:'active', color:'#854d0e'},
+  {id:'CAT02', name:'Thanh Nhiệt', desc:'Trà thảo mộc, chanh sả gừng, atisô đỏ thanh mát', sortOrder:2, status:'active', color:'#15803d'},
+  {id:'CAT03', name:'Nước Ép Trái Cây Tươi', desc:'100% trái cây tươi ép nguyên chất không đường hóa học', sortOrder:3, status:'active', color:'#ea580c'},
+  {id:'CAT04', name:'Thức Uống Khác', desc:'Nước tăng lực, nước ngọt lon, trà sữa Lipton, ca cao', sortOrder:4, status:'active', color:'#0284c7'},
+  {id:'CAT05', name:'Thức Ăn', desc:'Bún bò Huế, bánh mì bò kho, bánh bao điểm tâm sáng', sortOrder:5, status:'active', color:'#b91c1c'}
+];
+
 // Khởi tạo State từ Storage
 let db = {
+  categories: JSON.parse(localStorage.getItem('goan_categories')) || DEFAULT_CATEGORIES,
   products: JSON.parse(localStorage.getItem('goan_products')) || DEFAULT_PRODUCTS,
   customers: JSON.parse(localStorage.getItem('goan_customers')) || DEFAULT_CUSTOMERS,
   tables: initTables,
@@ -1638,6 +1889,7 @@ let db = {
 };
 
 function saveDB(){
+  localStorage.setItem('goan_categories', JSON.stringify(db.categories));
   localStorage.setItem('goan_products', JSON.stringify(db.products));
   localStorage.setItem('goan_customers', JSON.stringify(db.customers));
   localStorage.setItem('goan_tables', JSON.stringify(db.tables));
@@ -1728,11 +1980,22 @@ let appState = {
   cart: [] // {code, name, price, unit, img, qty}
 };
 
-const CATEGORIES = ['Tất cả', 'Cà Phê Năng Lượng', 'Thanh Nhiệt', 'Nước Ép Trái Cây Tươi', 'Thức Uống Khác', 'Thức Ăn'];
+function getActiveCategoryList(){
+  const activeCats = db.categories
+    .filter(c => c.status === 'active')
+    .sort((a,b) => (a.sortOrder || 1) - (b.sortOrder || 1))
+    .map(c => c.name);
+  return ['Tất cả', ...activeCats];
+}
 
 function renderCatTabs(){
   const el = document.getElementById('catTabs');
-  el.innerHTML = CATEGORIES.map(c =>
+  if(!el) return;
+  const catList = getActiveCategoryList();
+  if(!catList.includes(appState.activeCat)){
+    appState.activeCat = 'Tất cả';
+  }
+  el.innerHTML = catList.map(c =>
     `<button class="cat-tab${appState.activeCat === c ? ' active' : ''}" data-cat="${c}">${c}</button>`
   ).join('');
 
@@ -2140,7 +2403,7 @@ function confirmCheckoutOrder(){
 
   closeModal('modalCheckout');
 
-  // 6. Hiển thị phiếu in hóa đơn
+// 6. Hiển thị phiếu in hóa đơn
   showReceiptPreview('HÓA ĐƠN THANH TOÁN', invoiceId, newInvoice);
 
   // 7. Reset toàn bộ giao diện giỏ hàng của bàn này về 0
@@ -2204,45 +2467,386 @@ function showReceiptPreview(titleText, codeText, invObj = null){
 }
 
 /* ============================================================
-   4. MODULE SẢN PHẨM (MODULE 2: SẢN PHẨM)
+   4. MODULE SẢN PHẨM & QUẢN LÝ DANH MỤC THỰC ĐƠN (MODULE 2)
    ============================================================ */
+let currentProductSubTab = 'products'; // 'products' | 'categories'
+let selectedCatInProductView = 'all'; // 'all' hoặc tên danh mục
+
+function switchProductSubTab(tab){
+  currentProductSubTab = tab;
+  const btnProds = document.getElementById('btnSubTabProducts');
+  const btnCats = document.getElementById('btnSubTabCategories');
+  const viewProds = document.getElementById('viewProductByCat');
+  const viewCats = document.getElementById('viewCategoryCRUD');
+
+  if(tab === 'products'){
+    btnProds.classList.add('active');
+    btnCats.classList.remove('active');
+    viewProds.style.display = 'flex';
+    viewCats.style.display = 'none';
+  } else {
+    btnProds.classList.remove('active');
+    btnCats.classList.add('active');
+    viewProds.style.display = 'none';
+    viewCats.style.display = 'flex';
+  }
+  renderProductModule();
+}
+
 function renderProductModule(){
+  // 1. Cập nhật các thẻ KPI
   document.getElementById('kpiTotalProds').textContent = db.products.length;
-  const cats = [...new Set(db.products.map(p => p.cat))];
-  document.getElementById('kpiTotalCats').textContent = cats.length;
+  document.getElementById('kpiTotalCats').textContent = db.categories.length;
   const avg = db.products.length ? Math.round(db.products.reduce((s, p) => s + p.price, 0) / db.products.length) : 0;
   document.getElementById('kpiAvgPrice').textContent = fmtVND(avg);
+  const totalStock = db.products.reduce((s, p) => s + p.stock, 0);
+  const stockEl = document.getElementById('kpiTotalStockInMenu');
+  if(stockEl) stockEl.textContent = totalStock;
+
+  // 2. Render sidebar danh mục bên trái
+  renderCategorySidebar();
+
+  // 3. Render danh sách sản phẩm theo danh mục đang chọn
+  renderProductsBySelectedCat();
+
+  // 4. Render bảng quản lý danh mục (tab 2)
+  renderCategoryCRUDTable();
+}
+
+// RENDER SIDEBAR DANH MỤC (BÊN TRÁI)
+function renderCategorySidebar(){
+  const sidebarEl = document.getElementById('catSidebarList');
+  if(!sidebarEl) return;
+
+  const countBadgeEl = document.getElementById('catSidebarCount');
+  if(countBadgeEl) countBadgeEl.textContent = `${db.categories.length} nhóm`;
+
+  const totalAll = db.products.length;
+  let html = `
+    <button class="cat-item-btn${selectedCatInProductView === 'all' ? ' active' : ''}" onclick="selectCategoryInProductView('all')">
+      <div class="cat-item-left">
+        <span class="cat-color-dot" style="background:#0077e6;"></span>
+        <span class="cat-name-text">Tất cả sản phẩm</span>
+      </div>
+      <span class="cat-badge-count">${totalAll}</span>
+    </button>
+  `;
+
+  // Sắp xếp danh mục theo thứ tự sortOrder
+  const sortedCats = [...db.categories].sort((a,b) => (a.sortOrder||1) - (b.sortOrder||1));
+
+  sortedCats.forEach(cat => {
+    const prodCount = db.products.filter(p => p.cat === cat.name).length;
+    const isAct = selectedCatInProductView === cat.name;
+    const dotColor = cat.color || '#0077e6';
+    const statusNote = cat.status === 'inactive' ? ' (Tạm ẩn)' : '';
+
+    html += `
+      <button class="cat-item-btn${isAct ? ' active' : ''}" onclick="selectCategoryInProductView('${cat.name}')">
+        <div class="cat-item-left">
+          <span class="cat-color-dot" style="background:${dotColor};"></span>
+          <span class="cat-name-text" title="${cat.name}${statusNote}">${cat.name}${statusNote}</span>
+        </div>
+        <span class="cat-badge-count">${prodCount}</span>
+      </button>
+    `;
+  });
+
+  sidebarEl.innerHTML = html;
+}
+
+function selectCategoryInProductView(catName){
+  selectedCatInProductView = catName;
+  renderCategorySidebar();
+  renderProductsBySelectedCat();
+}
+
+// RENDER BẢNG SẢN PHẨM THEO DANH MỤC ĐANG CHỌN (BÊN PHẢI)
+function renderProductsBySelectedCat(){
+  const titleEl = document.getElementById('currentCatViewTitle');
+  const descEl = document.getElementById('currentCatViewDesc');
+  const searchInput = document.getElementById('catProdSearchInput');
+  const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+  let catObj = null;
+  if(selectedCatInProductView === 'all'){
+    titleEl.textContent = 'Tất cả sản phẩm';
+    descEl.textContent = `Hiển thị toàn bộ thực đơn (${db.products.length} sản phẩm).`;
+  } else {
+    catObj = db.categories.find(c => c.name === selectedCatInProductView);
+    titleEl.innerHTML = `
+      <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:${catObj ? catObj.color : '#0077e6'};"></span>
+      ${selectedCatInProductView}
+    `;
+    descEl.textContent = catObj && catObj.desc ? catObj.desc : `Các món ăn & đồ uống thuộc nhóm ${selectedCatInProductView}.`;
+  }
+
+  // Lọc sản phẩm theo danh mục và từ khóa
+  let filtered = db.products;
+  if(selectedCatInProductView !== 'all'){
+    filtered = filtered.filter(p => p.cat === selectedCatInProductView);
+  }
+  if(q){
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q));
+  }
 
   const tbody = document.getElementById('productTableBody');
-  tbody.innerHTML = db.products.map(p => `
-    <tr>
-      <td style="width:50px;">
-        <div style="width:40px; height:40px; border-radius:8px; overflow:hidden; background:#f0f9ff; display:flex; align-items:center; justify-content:center;">
-          ${p.img ? `<img src="assets/products/${p.img}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">` : `<span style="font-weight:700; color:var(--blue-600);">${initials(p.name)}</span>`}
-        </div>
-      </td>
-      <td><strong>${p.code}</strong></td>
-      <td><strong>${p.name}</strong></td>
-      <td><span class="badge-status info">${p.cat}</span></td>
-      <td>${p.unit}</td>
-      <td style="color:var(--blue-700); font-weight:700;">${fmtVND(p.price)}</td>
-      <td><strong>${p.stock}</strong></td>
-      <td>
-        <button class="btn-outline" style="padding:4px 8px; font-size:12px; color:var(--danger); border-color:#fca5a5;" onclick="deleteProduct('${p.code}')">Xóa</button>
-      </td>
-    </tr>
+  if(!tbody) return;
+
+  if(filtered.length === 0){
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align:center; color:var(--ink-400); padding:40px 0;">
+          Không có sản phẩm nào trong danh mục này${q ? ' phù hợp từ khóa tìm kiếm' : ''}.
+        </td>
+      </tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(p => {
+    const stockBadge = p.stock > 10 ? 'success' : (p.stock > 0 ? 'warning' : 'danger');
+    const stockText = p.stock > 0 ? `Còn ${p.stock}` : 'Hết hàng';
+    return `
+      <tr>
+        <td>
+          <div style="width:38px; height:38px; border-radius:8px; overflow:hidden; background:#f0f9ff; display:flex; align-items:center; justify-content:center; border:1px solid #e2e8f0;">
+            ${p.img 
+              ? `<img src="assets/products/${p.img}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">` 
+              : `<span style="font-weight:700; font-size:11px; color:var(--blue-600);">${initials(p.name)}</span>`
+            }
+          </div>
+        </td>
+        <td><strong>${p.code}</strong></td>
+        <td>
+          <strong style="color:var(--ink-900);">${p.name}</strong>
+        </td>
+        <td><span class="badge-status info">${p.cat}</span></td>
+        <td>${p.unit}</td>
+        <td style="color:var(--blue-700); font-weight:700;">${fmtVND(p.price)}</td>
+        <td><span class="badge-status ${stockBadge}">${stockText}</span></td>
+        <td style="text-align:center;">
+          <div style="display:flex; gap:6px; justify-content:center;">
+            <button class="btn-outline" style="padding:4px 8px; font-size:11.5px; border-color:var(--blue-300); color:var(--blue-600);" onclick="openEditProductModal('${p.code}')">Sửa</button>
+            <button class="btn-outline" style="padding:4px 8px; font-size:11.5px; color:var(--danger); border-color:#fca5a5;" onclick="deleteProduct('${p.code}')">Xóa</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// Bắt sự kiện tìm kiếm sản phẩm trong danh mục
+const catProdSearchInput = document.getElementById('catProdSearchInput');
+if(catProdSearchInput){
+  catProdSearchInput.addEventListener('input', () => {
+    renderProductsBySelectedCat();
+  });
+}
+
+// RENDER BẢNG QUẢN LÝ DANH MỤC (TAB 2)
+function renderCategoryCRUDTable(){
+  const tbody = document.getElementById('categoryTableBody');
+  if(!tbody) return;
+
+  const sortedCats = [...db.categories].sort((a,b) => (a.sortOrder||1) - (b.sortOrder||1));
+
+  tbody.innerHTML = sortedCats.map(c => {
+    const count = db.products.filter(p => p.cat === c.name).length;
+    const isAct = c.status === 'active';
+    const statusBadge = isAct ? 'success' : 'warning';
+    const statusText = isAct ? 'Đang hoạt động' : 'Tạm ngưng';
+
+    return `
+      <tr>
+        <td><strong>${c.id}</strong></td>
+        <td>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:${c.color || '#0077e6'}; flex:none;"></span>
+            <strong>${c.name}</strong>
+          </div>
+        </td>
+        <td style="color:var(--ink-600);">${c.desc || '—'}</td>
+        <td style="text-align:center;"><strong style="color:var(--blue-700);">${count}</strong> món</td>
+        <td style="text-align:center;">${c.sortOrder || 1}</td>
+        <td style="text-align:center;"><span class="badge-status ${statusBadge}">${statusText}</span></td>
+        <td style="text-align:center;">
+          <div style="display:flex; gap:6px; justify-content:center;">
+            <button class="btn-outline" style="padding:4px 8px; font-size:11.5px; border-color:var(--blue-300); color:var(--blue-600);" onclick="openEditCategoryModal('${c.id}')">Sửa</button>
+            <button class="btn-outline" style="padding:4px 8px; font-size:11.5px; color:var(--danger); border-color:#fca5a5;" onclick="deleteCategory('${c.id}')">Xóa</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ==================== CÁC HÀM THAO TÁC DANH MỤC (CRUD CATEGORY) ====================
+function openCategoryModal(catId = null){
+  const titleEl = document.getElementById('modalCategoryTitle');
+  const idInput = document.getElementById('fCatId');
+  const nameInput = document.getElementById('fCatName');
+  const descInput = document.getElementById('fCatDesc');
+  const sortInput = document.getElementById('fCatSort');
+  const colorInput = document.getElementById('fCatColor');
+  const statusInput = document.getElementById('fCatStatus');
+
+  if(catId){
+    const c = db.categories.find(x => x.id === catId);
+    if(!c) return;
+    titleEl.textContent = 'Chỉnh sửa danh mục thực đơn';
+    idInput.value = c.id;
+    nameInput.value = c.name;
+    descInput.value = c.desc || '';
+    sortInput.value = c.sortOrder || 1;
+    colorInput.value = c.color || '#0077e6';
+    statusInput.value = c.status || 'active';
+  } else {
+    titleEl.textContent = 'Thêm danh mục thực đơn mới';
+    idInput.value = '';
+    nameInput.value = '';
+    descInput.value = '';
+    sortInput.value = db.categories.length + 1;
+    colorInput.value = '#0077e6';
+    statusInput.value = 'active';
+  }
+  openModal('modalCategory');
+}
+
+function openEditCategoryModal(catId){
+  openCategoryModal(catId);
+}
+
+function saveCategoryForm(){
+  const catId = document.getElementById('fCatId').value;
+  const name = document.getElementById('fCatName').value.trim();
+  const desc = document.getElementById('fCatDesc').value.trim();
+  const sortOrder = parseInt(document.getElementById('fCatSort').value) || 1;
+  const color = document.getElementById('fCatColor').value;
+  const status = document.getElementById('fCatStatus').value;
+
+  if(!name){
+    showToast('Vui lòng nhập tên danh mục!', 'warning');
+    return;
+  }
+
+  if(catId){
+    // SỬA DANH MỤC
+    const c = db.categories.find(x => x.id === catId);
+    if(c){
+      const oldName = c.name;
+      c.name = name;
+      c.desc = desc;
+      c.sortOrder = sortOrder;
+      c.color = color;
+      c.status = status;
+
+      // Đồng bộ đổi tên danh mục trong các sản phẩm đã thuộc danh mục này
+      if(oldName !== name){
+        db.products.forEach(p => {
+          if(p.cat === oldName) p.cat = name;
+        });
+        if(selectedCatInProductView === oldName){
+          selectedCatInProductView = name;
+        }
+      }
+      addNotification('system', `Đã cập nhật danh mục "<strong>${name}</strong>".`);
+      showToast(`Đã cập nhật danh mục "${name}"!`, 'success');
+    }
+  } else {
+    // THÊM MỚI DANH MỤC
+    const newId = 'CAT' + String(db.categories.length + 1).padStart(2, '0');
+    db.categories.push({
+      id: newId,
+      name: name,
+      desc: desc,
+      sortOrder: sortOrder,
+      color: color,
+      status: status
+    });
+    addNotification('system', `Tạo mới danh mục thực đơn "<strong>${name}</strong>".`);
+    showToast(`Đã thêm danh mục "${name}"!`, 'success');
+  }
+
+  saveDB();
+  closeModal('modalCategory');
+  renderProductModule();
+  renderCatTabs(); // Đồng bộ sang màn hình bán hàng
+}
+
+function deleteCategory(catId){
+  const c = db.categories.find(x => x.id === catId);
+  if(!c) return;
+
+  const count = db.products.filter(p => p.cat === c.name).length;
+  if(count > 0){
+    if(!confirm(`Danh mục "${c.name}" đang có ${count} sản phẩm! Nếu xóa, các sản phẩm này sẽ được chuyển sang nhóm "Thức Uống Khác". Bạn có chắc chắn muốn xóa?`)){
+      return;
+    }
+    db.products.forEach(p => {
+      if(p.cat === c.name) p.cat = 'Thức Uống Khác';
+    });
+  } else {
+    if(!confirm(`Bạn có chắc chắn muốn xóa danh mục "${c.name}"?`)){
+      return;
+    }
+  }
+
+  db.categories = db.categories.filter(x => x.id !== catId);
+  if(selectedCatInProductView === c.name){
+    selectedCatInProductView = 'all';
+  }
+  saveDB();
+  renderProductModule();
+  renderCatTabs();
+  addNotification('system', `Đã xóa danh mục "<strong>${c.name}</strong>".`);
+  showToast(`Đã xóa danh mục "${c.name}"!`, 'info');
+}
+
+// ==================== CÁC HÀM THAO TÁC SẢN PHẨM (CRUD PRODUCT) ====================
+function populateCategorySelect(selectedCat = ''){
+  const sel = document.getElementById('fProdCat');
+  if(!sel) return;
+  sel.innerHTML = db.categories.map(c => `
+    <option value="${c.name}"${c.name === selectedCat ? ' selected' : ''}>${c.name}</option>
   `).join('');
 }
 
 function openProductModal(){
-  document.getElementById('fProdCode').value = 'HH0000' + (db.products.length + 1);
+  document.getElementById('modalProductTitle').textContent = 'Thêm sản phẩm mới';
+  document.getElementById('fProdIsEdit').value = 'false';
+  document.getElementById('fProdCode').value = 'HH0000' + String(db.products.length + 1).padStart(2, '0');
+  document.getElementById('fProdCode').readOnly = false;
   document.getElementById('fProdName').value = '';
+  document.getElementById('fProdUnit').value = 'Ly';
   document.getElementById('fProdPrice').value = '';
   document.getElementById('fProdStock').value = '50';
+
+  const defaultCat = (selectedCatInProductView !== 'all') ? selectedCatInProductView : (db.categories[0] ? db.categories[0].name : '');
+  populateCategorySelect(defaultCat);
+  openModal('modalProduct');
+}
+
+function openProductModalForCurrentCat(){
+  openProductModal();
+}
+
+function openEditProductModal(code){
+  const p = db.products.find(x => x.code === code);
+  if(!p) return;
+  document.getElementById('modalProductTitle').textContent = `Chỉnh sửa sản phẩm: ${p.name}`;
+  document.getElementById('fProdIsEdit').value = 'true';
+  document.getElementById('fProdCode').value = p.code;
+  document.getElementById('fProdCode').readOnly = true;
+  document.getElementById('fProdName').value = p.name;
+  document.getElementById('fProdUnit').value = p.unit;
+  document.getElementById('fProdPrice').value = p.price;
+  document.getElementById('fProdStock').value = p.stock;
+  populateCategorySelect(p.cat);
   openModal('modalProduct');
 }
 
 function saveProductForm(){
+  const isEdit = document.getElementById('fProdIsEdit').value === 'true';
   const code = document.getElementById('fProdCode').value.trim();
   const name = document.getElementById('fProdName').value.trim();
   const cat = document.getElementById('fProdCat').value;
@@ -2251,34 +2855,53 @@ function saveProductForm(){
   const stock = parseInt(document.getElementById('fProdStock').value) || 0;
 
   if(!name || price <= 0){
-    showToast('Vui lòng nhập tên món và giá bán hợp lệ!', 'warning');
+    showToast('Vui lòng nhập tên sản phẩm và giá bán hợp lệ!', 'warning');
     return;
   }
 
-  db.products.unshift({
-    code: code || ('HH0000' + (db.products.length + 1)),
-    name: name,
-    cat: cat,
-    unit: unit,
-    price: price,
-    stock: stock,
-    img: null
-  });
+  if(isEdit){
+    const p = db.products.find(x => x.code === code);
+    if(p){
+      p.name = name;
+      p.cat = cat;
+      p.unit = unit;
+      p.price = price;
+      p.stock = stock;
+      addNotification('system', `Cập nhật thông tin món "<strong>${name}</strong>" (${fmtVND(price)}).`);
+      showToast(`Đã cập nhật sản phẩm "${name}"!`, 'success');
+    }
+  } else {
+    // Thêm mới
+    const finalCode = code || ('HH0000' + String(db.products.length + 1).padStart(2, '0'));
+    db.products.unshift({
+      code: finalCode,
+      name: name,
+      cat: cat,
+      unit: unit,
+      price: price,
+      stock: stock,
+      img: null
+    });
+    addNotification('system', `Món mới "<strong>${name}</strong>" (${fmtVND(price)}) đã được thêm vào nhóm ${cat}.`);
+    showToast(`Đã thêm món "${name}" thành công!`, 'success');
+  }
+
   saveDB();
   closeModal('modalProduct');
   renderProductModule();
-  renderGrid();
-  addNotification('system', `Món mới "<strong>${name}</strong>" (${fmtVND(price)}) đã được thêm vào thực đơn.`);
-  showToast(`Đã thêm món "${name}" thành công!`, 'success');
+  renderGrid(); // Cập nhật sang bán hàng
 }
 
 function deleteProduct(code){
-  if(confirm(`Bạn có chắc chắn muốn xóa sản phẩm mã ${code}?`)){
-    db.products = db.products.filter(p => p.code !== code);
+  const p = db.products.find(x => x.code === code);
+  if(!p) return;
+  if(confirm(`Bạn có chắc chắn muốn xóa món "${p.name}" (Mã: ${code})?`)){
+    db.products = db.products.filter(x => x.code !== code);
     saveDB();
     renderProductModule();
     renderGrid();
-    showToast('Đã xóa sản phẩm thành công!', 'info');
+    addNotification('system', `Đã xóa sản phẩm "<strong>${p.name}</strong>" khỏi thực đơn.`);
+    showToast(`Đã xóa sản phẩm "${p.name}"!`, 'info');
   }
 }
 
@@ -2524,7 +3147,8 @@ function saveShopSettings(){
 }
 
 function resetDemoData(){
-  if(confirm('Khôi phục toàn bộ dữ liệu mẫu (thực đơn, tồn kho, khách hàng, hóa đơn, thông báo)?')){
+  if(confirm('Khôi phục toàn bộ dữ liệu mẫu (danh mục, thực đơn, tồn kho, khách hàng, hóa đơn, thông báo)?')){
+    localStorage.removeItem('goan_categories');
     localStorage.removeItem('goan_products');
     localStorage.removeItem('goan_customers');
     localStorage.removeItem('goan_tables');
