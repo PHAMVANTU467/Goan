@@ -25,7 +25,7 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-  const parsedUrl = url.parse(req.url);
+  const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let pathname = decodeURIComponent(parsedUrl.pathname);
 
   // Xử lý các route mặc định
