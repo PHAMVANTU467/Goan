@@ -647,20 +647,130 @@
   }
   .form-control:focus{ border-color:var(--cyan-primary); box-shadow:0 0 0 3px rgba(51,204,255,0.2); }
 
-  /* TOAST NOTIFICATION */
+  /* TOAST NOTIFICATION — ĐÃ ĐỔI LÊN TRÊN ĐỈNH ĐỂ KHÔNG BAO GIỜ CHE NÚT THANH TOÁN */
   .toast-container{
-    position:fixed; bottom:20px; right:20px; z-index:9999;
+    position:fixed; top:70px; right:24px; z-index:99999;
     display:flex; flex-direction:column; gap:8px; pointer-events:none;
+    max-width:380px;
   }
   .toast{
-    background:var(--blue-900); color:#fff; padding:12px 18px; border-radius:10px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.25); font-size:13px; font-weight:500;
+    background:rgba(2, 43, 89, 0.94); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    color:#fff; padding:11px 16px; border-radius:10px;
+    box-shadow:0 10px 25px rgba(0, 40, 100, 0.25); font-size:13px; font-weight:600;
     display:flex; align-items:center; gap:8px; pointer-events:auto;
-    animation:slideUp .25s ease;
+    border:1px solid rgba(255,255,255,0.18);
+    animation:slideDown .22s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .toast.success{ background:#065f46; border-left:4px solid #10b981; }
-  .toast.info{ background:#0c4a6e; border-left:4px solid var(--cyan-primary); }
-  @keyframes slideUp{ from{ transform:translateY(20px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
+  .toast.success{ background:rgba(6, 95, 70, 0.94); border-left:4px solid #10b981; }
+  .toast.info{ background:rgba(12, 74, 110, 0.94); border-left:4px solid var(--cyan-primary); }
+  .toast.warning{ background:rgba(146, 64, 14, 0.94); border-left:4px solid #f59e0b; }
+  .toast.danger{ background:rgba(153, 27, 27, 0.94); border-left:4px solid #ef4444; }
+  @keyframes slideDown{ from{ transform:translateY(-20px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
+
+  /* CHUÔNG THÔNG BÁO BÊN CẠNH CHỦ QUÁN DEMO */
+  .notif-wrapper{
+    position:relative;
+  }
+  .notif-bell-btn{
+    width:38px; height:38px; border-radius:10px;
+    background:rgba(255, 255, 255, 0.15);
+    border:1px solid rgba(255, 255, 255, 0.3);
+    color:#ffffff; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    position:relative; transition:all .18s ease;
+  }
+  .notif-bell-btn:hover{
+    background:rgba(255, 255, 255, 0.28);
+    transform:translateY(-1px);
+  }
+  .notif-bell-btn svg{
+    width:20px; height:20px;
+  }
+  .notif-badge{
+    position:absolute; top:-4px; right:-4px;
+    background:#ef4444; color:#ffffff;
+    font-size:10.5px; font-weight:800; font-family:'Plus Jakarta Sans', sans-serif;
+    min-width:18px; height:18px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    padding:0 4px; border:2px solid #005bb5;
+    box-shadow:0 2px 6px rgba(239, 68, 68, 0.45);
+    transition:all .2s ease;
+  }
+  .notif-badge.hidden{
+    display:none;
+  }
+
+  /* DROPDOWN DANH SÁCH THÔNG BÁO */
+  .notif-dropdown{
+    position:absolute; top:calc(100% + 12px); right:0;
+    width:350px; max-width:92vw; background:#ffffff;
+    border-radius:14px; border:1px solid var(--line);
+    box-shadow:0 18px 40px rgba(0, 50, 130, 0.2);
+    display:none; flex-direction:column;
+    z-index:1000; overflow:hidden;
+    animation:dropdownFade .18s ease;
+  }
+  .notif-dropdown.show{
+    display:flex;
+  }
+  @keyframes dropdownFade{
+    from{ opacity:0; transform:translateY(-8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .notif-dropdown-header{
+    padding:12px 16px; background:#f4faff; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .notif-header-title{
+    display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:700; color:var(--blue-900);
+  }
+  .notif-header-badge{
+    background:#e0f2fe; color:var(--blue-600); font-size:11px; font-weight:700;
+    padding:2px 7px; border-radius:100px;
+  }
+  .notif-header-actions{
+    display:flex; align-items:center; gap:8px;
+  }
+  .notif-act-btn{
+    background:none; border:none; font-size:11.5px; font-weight:600;
+    color:var(--blue-600); cursor:pointer; padding:3px 6px; border-radius:4px;
+  }
+  .notif-act-btn:hover{ background:rgba(0, 119, 230, 0.08); }
+  .notif-act-btn.clear{ color:var(--ink-400); }
+  .notif-act-btn.clear:hover{ color:var(--danger); background:rgba(239, 68, 68, 0.08); }
+
+  .notif-list{
+    max-height:360px; overflow-y:auto;
+    display:flex; flex-direction:column;
+  }
+  .notif-item{
+    padding:12px 14px; border-bottom:1px solid #f1f5f9;
+    display:flex; gap:10px; align-items:flex-start; cursor:pointer;
+    transition:background .15s ease;
+    position:relative;
+  }
+  .notif-item:hover{ background:#f8fafc; }
+  .notif-item.unread{ background:#f0f9ff; }
+  .notif-item.unread::before{
+    content:""; position:absolute; left:4px; top:14px; bottom:14px;
+    width:3.5px; border-radius:2px; background:var(--cyan-primary);
+  }
+  .notif-icon{
+    width:32px; height:32px; border-radius:8px; flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .notif-icon.order{ background:#e6f9f0; color:#059669; }
+  .notif-icon.table{ background:#fef3c7; color:#d97706; }
+  .notif-icon.stock{ background:#fee2e2; color:#dc2626; }
+  .notif-icon.system{ background:#e0f2fe; color:#0284c7; }
+  .notif-icon svg{ width:16px; height:16px; }
+  .notif-content{ flex:1; min-width:0; }
+  .notif-text{ font-size:12.5px; color:var(--ink-800); line-height:1.4; }
+  .notif-text strong{ color:var(--ink-900); }
+  .notif-time{ font-size:11px; color:var(--ink-400); margin-top:4px; }
+  .notif-empty{
+    padding:32px 16px; text-align:center; color:var(--ink-400); font-size:12.5px;
+  }
 
   /* BÀN GRID */
   .table-grid{
@@ -711,8 +821,36 @@
       <ul class="top-nav" id="topNav"></ul>
     </div>
 
-    <!-- KHỐI TÀI KHOẢN -->
+    <!-- KHỐI TÀI KHOẢN & CHUÔNG THÔNG BÁO -->
     <div class="top-right">
+      <!-- CHUÔNG THÔNG BÁO BÊN CẠNH CHỦ QUÁN DEMO -->
+      <div class="notif-wrapper" id="notifWrapper">
+        <button class="notif-bell-btn" id="notifBellBtn" title="Xem thông báo hệ thống">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="notif-badge" id="notifBadge">0</span>
+        </button>
+
+        <!-- DROPDOWN THÔNG BÁO -->
+        <div class="notif-dropdown" id="notifDropdown">
+          <div class="notif-dropdown-header">
+            <div class="notif-header-title">
+              <span>Thông báo</span>
+              <span class="notif-header-badge" id="notifHeaderUnread">0 mới</span>
+            </div>
+            <div class="notif-header-actions">
+              <button class="notif-act-btn" onclick="markAllNotifsAsRead()" title="Đánh dấu tất cả đã đọc">Đã đọc tất cả</button>
+              <button class="notif-act-btn clear" onclick="clearAllNotifs()" title="Xóa tất cả thông báo">Xóa</button>
+            </div>
+          </div>
+          <div class="notif-list" id="notifList">
+            <!-- Danh sách thông báo sẽ được render tại đây -->
+          </div>
+        </div>
+      </div>
+
       <div class="user-profile-pill" id="userProfileBtn" title="Tài khoản thu ngân">
         <span class="user-dot"></span>
         <span class="user-name" id="topUserName">Chủ quán Demo</span>
@@ -1422,6 +1560,37 @@ if(Array.isArray(initTables)){
   });
 }
 
+const DEFAULT_NOTIFS = [
+  {
+    id: 1,
+    type: 'order',
+    text: 'Hóa đơn <strong>#HD0002</strong> đã thanh toán thành công <strong>79.000đ</strong> tại Bàn 3.',
+    time: '10:15 hôm nay',
+    unread: true
+  },
+  {
+    id: 2,
+    type: 'stock',
+    text: 'Món <strong>"Bún Bò Huế"</strong> trong kho sắp hết hàng (chỉ còn 18 tô).',
+    time: '09:45 hôm nay',
+    unread: true
+  },
+  {
+    id: 3,
+    type: 'table',
+    text: 'Đã mở phục vụ và gán đơn hàng cho <strong>Bàn 1</strong>.',
+    time: '09:30 hôm nay',
+    unread: true
+  },
+  {
+    id: 4,
+    type: 'system',
+    text: 'Hệ thống bán hàng GOAN đã đồng bộ dữ liệu hoàn tất.',
+    time: '09:00 hôm nay',
+    unread: false
+  }
+];
+
 // Khởi tạo State từ Storage
 let db = {
   products: JSON.parse(localStorage.getItem('goan_products')) || DEFAULT_PRODUCTS,
@@ -1459,6 +1628,7 @@ let db = {
       cashier: 'Chủ quán Demo'
     }
   ],
+  notifs: JSON.parse(localStorage.getItem('goan_notifications')) || DEFAULT_NOTIFS,
   settings: JSON.parse(localStorage.getItem('goan_settings')) || {
     shopName: 'GOAN Coffee & Tea',
     shopAddr: '123 Đường Công Nghệ, Phường Tân Phú, TP.HCM',
@@ -1472,6 +1642,7 @@ function saveDB(){
   localStorage.setItem('goan_customers', JSON.stringify(db.customers));
   localStorage.setItem('goan_tables', JSON.stringify(db.tables));
   localStorage.setItem('goan_invoices', JSON.stringify(db.invoices));
+  localStorage.setItem('goan_notifications', JSON.stringify(db.notifs));
   localStorage.setItem('goan_settings', JSON.stringify(db.settings));
 }
 saveDB();
@@ -1852,6 +2023,7 @@ document.getElementById('btnSaveOrder').addEventListener('click', () => {
   tbl.note = document.getElementById('cartNoteInput').value;
   tbl.discount = Math.max(0, parseInt(document.getElementById('cartDiscountInput').value) || 0);
   saveDB();
+  addNotification('table', `Đã lưu đơn tạm gồm <strong>${tbl.cart.length} món</strong> cho <strong>${appState.currentTable}</strong>.`);
   showToast(`Đã lưu đơn cho ${appState.currentTable}!`, 'success');
 });
 
@@ -1962,6 +2134,9 @@ function confirmCheckoutOrder(){
   tbl.note = '';
   tbl.customer = null;
   saveDB();
+
+  // Bắn thông báo vào chuông hệ thống
+  addNotification('order', `Thanh toán thành công hóa đơn <strong>#${invoiceId}</strong> (${fmtVND(total)}) tại <strong>${appState.currentTable}</strong>.`);
 
   closeModal('modalCheckout');
 
@@ -2093,6 +2268,7 @@ function saveProductForm(){
   closeModal('modalProduct');
   renderProductModule();
   renderGrid();
+  addNotification('system', `Món mới "<strong>${name}</strong>" (${fmtVND(price)}) đã được thêm vào thực đơn.`);
   showToast(`Đã thêm món "${name}" thành công!`, 'success');
 }
 
@@ -2159,6 +2335,7 @@ function saveCustomerForm(){
   saveDB();
   closeModal('modalCustomer');
   renderCustomerModule();
+  addNotification('system', `Khách hàng mới <strong>${name}</strong> (${phone}) đã đăng ký thành viên.`);
   showToast(`Đã thêm khách hàng ${name}!`, 'success');
 }
 
@@ -2249,6 +2426,7 @@ function confirmAddStock(){
     closeModal('modalStock');
     renderInventoryModule();
     renderGrid();
+    addNotification('stock', `Đã nhập thêm <strong>${addQty} ${p.unit}</strong> cho món "<strong>${p.name}</strong>" (Tồn mới: ${p.stock}).`);
     showToast(`Đã nhập thêm ${addQty} ${p.unit} cho món "${p.name}"!`, 'success');
   }
 }
@@ -2346,18 +2524,130 @@ function saveShopSettings(){
 }
 
 function resetDemoData(){
-  if(confirm('Khôi phục toàn bộ dữ liệu mẫu (thực đơn, tồn kho, khách hàng, hóa đơn)?')){
+  if(confirm('Khôi phục toàn bộ dữ liệu mẫu (thực đơn, tồn kho, khách hàng, hóa đơn, thông báo)?')){
     localStorage.removeItem('goan_products');
     localStorage.removeItem('goan_customers');
     localStorage.removeItem('goan_tables');
     localStorage.removeItem('goan_invoices');
+    localStorage.removeItem('goan_notifications');
     localStorage.removeItem('goan_settings');
     location.reload();
   }
 }
 
 /* ============================================================
-   10. QUẢN LÝ TÀI KHOẢN & ĐĂNG XUẤT
+   10. QUẢN LÝ THÔNG BÁO HỆ THỐNG & CHUÔNG THÔNG BÁO
+   ============================================================ */
+function getNotifIconSvg(type){
+  if(type === 'order') return `<svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  if(type === 'stock') return `<svg viewBox="0 0 24 24" fill="none"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  if(type === 'table') return `<svg viewBox="0 0 24 24" fill="none"><path d="M3 10h18M5 10v9m14-9v9M3 6h18l-2 4H5L3 6Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  return `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4m0-4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+}
+
+function updateNotifBadge(){
+  const unreadCount = db.notifs.filter(n => n.unread).length;
+  const badge = document.getElementById('notifBadge');
+  const headerUnread = document.getElementById('notifHeaderUnread');
+
+  if(badge){
+    badge.textContent = unreadCount;
+    if(unreadCount > 0){
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  }
+  if(headerUnread){
+    headerUnread.textContent = `${unreadCount} mới`;
+  }
+}
+
+function renderNotifList(){
+  const listEl = document.getElementById('notifList');
+  if(!listEl) return;
+
+  if(!db.notifs || db.notifs.length === 0){
+    listEl.innerHTML = `<div class="notif-empty">Không có thông báo nào</div>`;
+    updateNotifBadge();
+    return;
+  }
+
+  listEl.innerHTML = db.notifs.map(n => `
+    <div class="notif-item${n.unread ? ' unread' : ''}" onclick="markNotifAsRead(${n.id})" title="${n.unread ? 'Bấm để đánh dấu đã đọc' : ''}">
+      <div class="notif-icon ${n.type || 'system'}">
+        ${getNotifIconSvg(n.type)}
+      </div>
+      <div class="notif-content">
+        <div class="notif-text">${n.text}</div>
+        <div class="notif-time">${n.time}</div>
+      </div>
+    </div>
+  `).join('');
+
+  updateNotifBadge();
+}
+
+// BẤM VÀO THÔNG BÁO -> ĐÁNH DẤU ĐÃ ĐỌC VÀ SỐ THÔNG BÁO CHƯA ĐỌC GIẢM DẦN!
+function markNotifAsRead(id){
+  const item = db.notifs.find(n => n.id === id);
+  if(item && item.unread){
+    item.unread = false;
+    saveDB();
+    renderNotifList();
+  }
+}
+
+// ĐÁNH DẤU TẤT CẢ ĐÃ ĐỌC
+function markAllNotifsAsRead(){
+  db.notifs.forEach(n => { n.unread = false; });
+  saveDB();
+  renderNotifList();
+  showToast('Đã đánh dấu tất cả thông báo là đã đọc!', 'info');
+}
+
+// XÓA TẤT CẢ THÔNG BÁO
+function clearAllNotifs(){
+  if(confirm('Bạn có muốn xóa toàn bộ thông báo hệ thống?')){
+    db.notifs = [];
+    saveDB();
+    renderNotifList();
+    showToast('Đã xóa tất cả thông báo!', 'info');
+  }
+}
+
+// HÀM TỰ ĐỘNG THÊM THÔNG BÁO MỚI VÀO CHUÔNG
+function addNotification(type, text){
+  const now = new Date();
+  const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const newNotif = {
+    id: Date.now(),
+    type: type,
+    text: text,
+    time: `${timeStr} hôm nay`,
+    unread: true
+  };
+  db.notifs.unshift(newNotif);
+  if(db.notifs.length > 35) db.notifs.pop(); // Lưu tối đa 35 thông báo
+  saveDB();
+  renderNotifList();
+}
+
+// Bật tắt popup chuông thông báo
+const notifBellBtn = document.getElementById('notifBellBtn');
+const notifDropdown = document.getElementById('notifDropdown');
+if(notifBellBtn && notifDropdown){
+  notifBellBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(userDropdown) userDropdown.classList.remove('show');
+    notifDropdown.classList.toggle('show');
+  });
+  notifDropdown.addEventListener('click', (e) => { e.stopPropagation(); });
+  document.addEventListener('click', () => { notifDropdown.classList.remove('show'); });
+}
+
+/* ============================================================
+   11. QUẢN LÝ TÀI KHOẢN & ĐĂNG XUẤT
    ============================================================ */
 function initUserSession(){
   let user = null;
@@ -2397,6 +2687,7 @@ const userDropdown = document.getElementById('userDropdown');
 if(userProfileBtn && userDropdown){
   userProfileBtn.addEventListener('click', (e) => {
     e.stopPropagation();
+    if(notifDropdown) notifDropdown.classList.remove('show');
     userDropdown.classList.toggle('show');
   });
   document.addEventListener('click', () => { userDropdown.classList.remove('show'); });
@@ -2415,6 +2706,7 @@ initUserSession();
 renderCatTabs();
 renderGrid();
 renderCart();
+renderNotifList();
 </script>
 </body>
 </html>
