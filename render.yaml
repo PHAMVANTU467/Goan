@@ -1,0 +1,15 @@
+services:
+  # Cấu hình 1: Static Site (Hoàn toàn miễn phí, tối ưu nhất cho web tĩnh & hình ảnh)
+  - type: static
+    name: goan-pos-web
+    env: static
+    plan: free
+    buildCommand: ""
+    publishPath: .
+    routes:
+      - type: rewrite
+        source: /login
+        destination: /index.html
+      - type: rewrite
+        source: /pos
+        destination: /goan-pos.html

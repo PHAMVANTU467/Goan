@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOAN — Đăng nhập hệ thống</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan-primary: #33CCFF;
+    --cyan-light: #99FFFF;
+    --cyan-soft: #e5faff;
+    --cyan-bg: #f0fdff;
+    --blue-600: #0077e6;
+    --blue-700: #005bb5;
+    --blue-800: #00458a;
+    --blue-900: #022b59;
+    --ink-900: #0f172a;
+    --ink-700: #334155;
+    --ink-500: #64748b;
+    --ink-400: #94a3b8;
+    --line: #d8e8f5;
+    --white: #ffffff;
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --success: #10b981;
+    --success-bg: #ecfdf5;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--ink-900);
+    background: linear-gradient(135deg, #33CCFF 0%, #6be3ff 32%, #99FFFF 70%, #e0fcff 100%);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .screen{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:1.15fr 1fr;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 18% 25%, rgba(255, 255, 255, 0.45) 0%, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(153, 255, 255, 0.5) 0%, transparent 45%),
+      linear-gradient(140deg, #33CCFF 0%, #6be3ff 32%, #99FFFF 68%, #e8fdff 100%);
+  }
+
+  /* Pattern nền nhẹ công nghệ */
+  .screen::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:radial-gradient(rgba(0, 119, 230, 0.08) 1.2px, transparent 1.2px);
+    background-size:24px 24px;
+    pointer-events:none;
+  }
+
+  /* ===================== LEFT: BRAND PANEL ===================== */
+  .brand{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    padding:54px 60px 48px;
+    justify-content:space-between;
+  }
+
+  .brand-top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+
+  .brand-logo-circle{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:var(--blue-600);
+    box-shadow:0 8px 20px rgba(0, 119, 230, 0.28);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex:none;
+  }
+  .brand-logo-circle svg{
+    width:26px;
+    height:26px;
+    color:var(--white);
+  }
+
+  .brand-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:26px;
+    font-weight:700;
+    color:var(--blue-700);
+    letter-spacing:0.4px;
+  }
+
+  .brand-center{
+    margin:auto 0;
+    padding:30px 0;
+  }
+
+  .brand-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255, 255, 255, 0.7);
+    backdrop-filter:blur(8px);
+    border:1px solid rgba(255, 255, 255, 0.9);
+    padding:7px 16px;
+    border-radius:100px;
+    color:var(--blue-700);
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:20px;
+    box-shadow:0 4px 12px rgba(0, 119, 230, 0.08);
+  }
+  .brand-badge .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--blue-600);
+    box-shadow:0 0 0 3px rgba(0, 119, 230, 0.2);
+  }
+
+  .brand-slogan{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:clamp(30px, 3.2vw, 42px);
+    font-weight:700;
+    color:var(--blue-900);
+    line-height:1.2;
+    margin-bottom:16px;
+  }
+  .brand-slogan span{
+    color:var(--blue-600);
+  }
+
+  .brand-desc{
+    font-size:15px;
+    color:var(--ink-700);
+    line-height:1.6;
+    max-width:44ch;
+  }
+
+  /* Thiết bị minh họa POS thanh toán công nghệ cao */
+  .brand-illustration{
+    margin-top:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .illustration-svg{
+    width:100%;
+    max-width:460px;
+    height:auto;
+    filter:drop-shadow(0 20px 30px rgba(0, 90, 160, 0.15));
+  }
+
+  .brand-footer{
+    font-size:13px;
+    color:var(--ink-700);
+    opacity:0.85;
+  }
+
+  /* ===================== RIGHT: FORM PANEL ===================== */
+  .panel{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 32px;
+  }
+
+  /* THẺ CARD TRẮNG TINH TẾ (TƯƠNG TỰ ẢNH MẪU) */
+  .form-card{
+    width:100%;
+    max-width:440px;
+    background:var(--white);
+    border-radius:24px;
+    padding:44px 38px 40px;
+    box-shadow:0 24px 60px rgba(0, 110, 180, 0.16), 0 4px 16px rgba(0,0,0,0.03);
+    border:1px solid rgba(255, 255, 255, 0.85);
+  }
+
+  .card-top{
+    text-align:center;
+    margin-bottom:28px;
+  }
+
+  .card-logo{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:var(--blue-600);
+    box-shadow:0 8px 20px rgba(0, 119, 230, 0.3);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:16px;
+  }
+  .card-logo svg{
+    width:28px;
+    height:28px;
+    color:var(--white);
+  }
+
+  .card-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:23px;
+    font-weight:700;
+    color:var(--ink-900);
+    letter-spacing:-0.3px;
+  }
+
+  .step{ display:none; }
+  .step.active{ display:block; }
+
+  /* FIELD INPUTS */
+  .field{
+    margin-bottom:18px;
+  }
+
+  .field label{
+    display:block;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink-900);
+    margin-bottom:8px;
+  }
+
+  .input-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+  }
+
+  .input-icon{
+    position:absolute;
+    left:14px;
+    color:var(--ink-400);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+    transition:color .15s ease;
+  }
+  .input-icon svg{ width:18px; height:18px; }
+
+  .input-wrap input{
+    width:100%;
+    padding:13px 40px 13px 44px;
+    border:1.5px solid #dce8f3;
+    border-radius:10px;
+    background:#ffffff;
+    font-family:'Inter', sans-serif;
+    font-size:14.5px;
+    color:var(--ink-900);
+    outline:none;
+    transition:all .18s ease;
+  }
+
+  .input-wrap input::placeholder{
+    color:var(--ink-400);
+    font-size:14px;
+  }
+
+  .input-wrap:focus-within input{
+    border-color:var(--cyan-primary);
+    box-shadow:0 0 0 4px rgba(51, 204, 255, 0.2);
+  }
+  .input-wrap:focus-within .input-icon{
+    color:var(--blue-600);
+  }
+
+  .input-wrap.error input{
+    border-color:var(--danger);
+    background:var(--danger-bg);
+  }
+  .input-wrap.error .input-icon{
+    color:var(--danger);
+  }
+
+  .icon-pw-btn{
+    position:absolute;
+    right:12px;
+    background:none;
+    border:none;
+    color:var(--ink-400);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    padding:4px;
+    transition:color .15s ease;
+  }
+  .icon-pw-btn:hover{ color:var(--ink-700); }
+  .icon-pw-btn svg{ width:18px; height:18px; }
+
+  .field-note{
+    font-size:12px;
+    color:var(--danger);
+    margin-top:6px;
+    display:none;
+  }
+  .field-note.show{ display:block; }
+
+  /* REMEMBER & FORGOT */
+  .row-meta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:18px 0 22px;
+    font-size:13px;
+  }
+
+  .remember-box{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--ink-700);
+    cursor:pointer;
+    user-select:none;
+  }
+  .remember-box input{
+    width:16px;
+    height:16px;
+    accent-color:var(--blue-600);
+    cursor:pointer;
+  }
+
+  .link-forgot{
+    color:var(--blue-600);
+    text-decoration:none;
+    font-weight:600;
+    transition:color .15s ease;
+  }
+  .link-forgot:hover{
+    color:var(--blue-800);
+    text-decoration:underline;
+  }
+
+  /* NÚT ĐĂNG NHẬP XANH DƯƠNG RỰC RỠ (GIỐNG ẢNH) */
+  .btn-submit{
+    width:100%;
+    padding:13px 20px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(135deg, #0077e6 0%, #0099ff 100%);
+    color:var(--white);
+    font-family:'Inter', sans-serif;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    box-shadow:0 8px 20px rgba(0, 119, 230, 0.28);
+    transition:all .18s ease;
+  }
+  .btn-submit:hover{
+    background:linear-gradient(135deg, #0066cc 0%, #0088ee 100%);
+    box-shadow:0 10px 24px rgba(0, 119, 230, 0.38);
+    transform:translateY(-1px);
+  }
+  .btn-submit:active{
+    transform:translateY(0);
+  }
+  .btn-submit svg{ width:18px; height:18px; }
+
+  .btn-submit.shake{ animation:shake .32s ease; }
+  @keyframes shake{
+    25%{ transform:translateX(-6px); }
+    75%{ transform:translateX(6px); }
+  }
+
+  /* ALERTS */
+  .alert-box{
+    display:none;
+    align-items:flex-start;
+    gap:10px;
+    padding:11px 14px;
+    border-radius:9px;
+    font-size:12.8px;
+    line-height:1.45;
+    margin-top:14px;
+  }
+  .alert-box.show{ display:flex; }
+  .alert-danger{
+    background:var(--danger-bg);
+    border:1px solid #fed7d7;
+    color:#991b1b;
+  }
+  .alert-success{
+    background:var(--success-bg);
+    border:1px solid #bbf7d0;
+    color:#166534;
+    margin-bottom:16px;
+    margin-top:0;
+  }
+
+  /* KHỐI TÀI KHOẢN DEMO */
+  .demo-box{
+    margin-top:22px;
+    padding:14px 16px;
+    background:var(--cyan-soft);
+    border:1.5px dashed var(--cyan-primary);
+    border-radius:12px;
+  }
+  .demo-box-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:8px;
+  }
+  .demo-badge{
+    font-size:11px;
+    font-weight:700;
+    color:var(--blue-700);
+    background:rgba(51, 204, 255, 0.3);
+    padding:3px 8px;
+    border-radius:6px;
+    letter-spacing:0.4px;
+  }
+  .demo-sub{
+    font-size:12px;
+    color:var(--ink-500);
+  }
+  .demo-credentials{
+    font-size:12.8px;
+    color:var(--ink-700);
+    display:flex;
+    gap:14px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .demo-credentials strong{
+    color:var(--blue-900);
+    font-family:monospace;
+    font-size:13.5px;
+    user-select:all;
+  }
+  .demo-actions{
+    display:flex;
+    gap:8px;
+  }
+  .btn-demo-fill{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:8px 10px;
+    background:var(--white);
+    border:1.5px solid var(--cyan-primary);
+    border-radius:8px;
+    color:var(--blue-700);
+    font-size:12.5px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .btn-demo-fill:hover{
+    background:#d8f8ff;
+  }
+  .btn-demo-quick{
+    flex:1.25;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:8px 10px;
+    background:var(--blue-600);
+    border:1.5px solid var(--blue-600);
+    border-radius:8px;
+    color:var(--white);
+    font-size:12.5px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 4px 10px rgba(0, 119, 230, 0.2);
+    transition:all .15s ease;
+  }
+  .btn-demo-quick:hover{
+    background:var(--blue-700);
+  }
+
+  /* STEP 2: OTP */
+  .back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:var(--ink-500);
+    font-size:13px;
+    text-decoration:none;
+    cursor:pointer;
+    margin-bottom:18px;
+    transition:color .15s ease;
+  }
+  .back-btn:hover{ color:var(--blue-600); }
+
+  .otp-desc{
+    font-size:13.5px;
+    color:var(--ink-500);
+    line-height:1.5;
+    margin-bottom:20px;
+    text-align:center;
+  }
+
+  .otp-inputs{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .otp-inputs input{
+    width:100%;
+    aspect-ratio:1;
+    text-align:center;
+    font-size:22px;
+    font-weight:700;
+    border:1.5px solid #dce8f3;
+    border-radius:10px;
+    outline:none;
+    font-family:'Space Grotesk', sans-serif;
+    color:var(--blue-900);
+    transition:all .15s ease;
+  }
+  .otp-inputs input:focus{
+    border-color:var(--cyan-primary);
+    box-shadow:0 0 0 4px rgba(51, 204, 255, 0.2);
+  }
+
+  .otp-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12.5px;
+    color:var(--ink-500);
+    margin-bottom:18px;
+  }
+  .resend-link{
+    color:var(--blue-600);
+    font-weight:600;
+    cursor:pointer;
+  }
+  .resend-link.disabled{
+    color:var(--ink-400);
+    cursor:default;
+  }
+
+  .btn-skip{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    background:transparent;
+    border:1.5px solid #dce8f3;
+    border-radius:10px;
+    color:var(--ink-700);
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .btn-skip:hover{
+    background:#f8fafc;
+    border-color:var(--cyan-primary);
+    color:var(--blue-700);
+  }
+
+  @media (max-width: 960px){
+    .screen{ grid-template-columns:1fr; }
+    .brand{ padding:36px 28px 24px; min-height:auto; text-align:center; }
+    .brand-top{ justify-content:center; }
+    .brand-center{ padding:16px 0; }
+    .brand-illustration{ display:none; }
+    .brand-desc{ margin:0 auto; }
+    .panel{ padding:20px 20px 48px; }
+    .form-card{ padding:34px 24px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="screen">
+
+  <!-- ================= LEFT BRAND PANEL ================= -->
+  <div class="brand">
+    <div class="brand-top">
+      <div class="brand-logo-circle">
+        <!-- Logo tia chớp công nghệ sạc/bán hàng -->
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13 2L3 14h8l-2 8 11-13h-8l3-7z"/>
+        </svg>
+      </div>
+      <span class="brand-title">GOAN POS</span>
+    </div>
+
+    <div class="brand-center">
+      <div class="brand-badge">
+        <span class="dot"></span>
+        Hệ sinh thái bán hàng thông minh
+      </div>
+      <h1 class="brand-slogan">
+        Vận hành tinh gọn<br>
+        <span>Bứt phá doanh thu</span>
+      </h1>
+      <p class="brand-desc">
+        Giải pháp quản lý bán hàng đa kênh thế hệ mới kết hợp phần cứng POS hiện đại và công nghệ điện toán đám mây.
+      </p>
+
+      <div class="brand-illustration">
+        <!-- Vector minh họa trạm POS / quầy thanh toán cao cấp tông trắng - xanh dương -->
+        <svg class="illustration-svg" viewBox="0 0 520 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Bệ đứng công nghệ -->
+          <ellipse cx="260" cy="245" rx="200" ry="24" fill="rgba(0, 119, 230, 0.12)"/>
+          <ellipse cx="260" cy="243" rx="140" ry="14" fill="rgba(51, 204, 255, 0.2)"/>
+
+          <!-- THIẾT BỊ 1 (TRÁI): Máy in bill & quét mã vạch màu trắng -->
+          <g transform="translate(60, 80)">
+            <rect x="10" y="20" width="95" height="135" rx="16" fill="#ffffff" stroke="#d5ebfa" stroke-width="2"/>
+            <rect x="22" y="32" width="71" height="42" rx="8" fill="#f0f9ff"/>
+            <circle cx="57.5" cy="53" r="14" fill="var(--cyan-primary)" opacity="0.3"/>
+            <path d="M52 53h11M57.5 47.5v11" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round"/>
+            <rect x="24" y="88" width="67" height="6" rx="3" fill="#0077e6" opacity="0.8"/>
+            <rect x="24" y="100" width="45" height="5" rx="2.5" fill="#94a3b8"/>
+            <circle cx="57.5" cy="130" r="6" fill="#10b981"/>
+            <!-- Giấy in bill trồi lên -->
+            <path d="M28 20 V8 H87 V20 Z" fill="#ffffff" stroke="#d5ebfa" stroke-width="1.5"/>
+            <line x1="36" y1="12" x2="60" y2="12" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="36" y1="16" x2="78" y2="16" stroke="#cbd5e1" stroke-width="1.5"/>
+          </g>
+
+          <!-- THIẾT BỊ 2 (GIỮA): Máy POS màn hình cảm ứng trung tâm màu trắng cực đẹp -->
+          <g transform="translate(175, 20)">
+            <!-- Chân đế POS kim loại trắng -->
+            <path d="M60 185 L75 120 H95 L110 185 Z" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+            <rect x="40" y="185" width="90" height="16" rx="8" fill="#ffffff" stroke="#d5ebfa" stroke-width="2"/>
+            <!-- Thân máy POS xoay -->
+            <rect x="10" y="20" width="150" height="110" rx="14" fill="#ffffff" stroke="#0077e6" stroke-width="2.5" filter="drop-shadow(0 12px 24px rgba(0, 119, 230, 0.2))"/>
+            <!-- Màn hình cảm ứng xanh gradient -->
+            <rect x="18" y="28" width="134" height="94" rx="8" fill="url(#posScreenGrad)"/>
+            <!-- Đồ họa hiển thị trên màn hình POS -->
+            <rect x="26" y="36" width="40" height="16" rx="4" fill="#ffffff" opacity="0.9"/>
+            <rect x="72" y="36" width="30" height="7" rx="3.5" fill="#ffffff" opacity="0.6"/>
+            <rect x="72" y="46" width="20" height="5" rx="2.5" fill="#ffffff" opacity="0.4"/>
+            <!-- Biểu đồ cột mini -->
+            <rect x="28" y="78" width="12" height="30" rx="2" fill="#ffffff" opacity="0.5"/>
+            <rect x="44" y="66" width="12" height="42" rx="2" fill="#33CCFF"/>
+            <rect x="60" y="58" width="12" height="50" rx="2" fill="#ffffff"/>
+            <rect x="76" y="70" width="12" height="38" rx="2" fill="#99FFFF"/>
+            <!-- Nút thanh toán nhanh tròn -->
+            <circle cx="126" cy="94" r="14" fill="#ffffff"/>
+            <path d="M122 94l3 3 6-6" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+
+          <!-- THIẾT BỊ 3 (PHẢI): Thiết bị quẹt thẻ POS cầm tay màu trắng -->
+          <g transform="translate(365, 70)">
+            <rect x="10" y="10" width="85" height="150" rx="18" fill="#ffffff" stroke="#d5ebfa" stroke-width="2"/>
+            <rect x="20" y="22" width="65" height="48" rx="8" fill="#0077e6"/>
+            <!-- Màn hình thanh toán thẻ -->
+            <text x="32" y="44" fill="#ffffff" font-size="10" font-family="'Space Grotesk',sans-serif" font-weight="700">GOAN PAY</text>
+            <text x="32" y="58" fill="#99FFFF" font-size="9" font-family="'Inter',sans-serif">250.000đ</text>
+            <!-- Bàn phím số -->
+            <circle cx="28" cy="85" r="4" fill="#e2e8f0"/>
+            <circle cx="42" cy="85" r="4" fill="#e2e8f0"/>
+            <circle cx="56" cy="85" r="4" fill="#e2e8f0"/>
+            <circle cx="28" cy="100" r="4" fill="#e2e8f0"/>
+            <circle cx="42" cy="100" r="4" fill="#e2e8f0"/>
+            <circle cx="56" cy="100" r="4" fill="#e2e8f0"/>
+            <circle cx="28" cy="115" r="4" fill="#e2e8f0"/>
+            <circle cx="42" cy="115" r="4" fill="#e2e8f0"/>
+            <circle cx="56" cy="115" r="4" fill="#e2e8f0"/>
+            <!-- Khe thẻ chip -->
+            <rect x="25" y="138" width="55" height="5" rx="2.5" fill="#33CCFF"/>
+          </g>
+
+          <!-- Defs Gradient -->
+          <defs>
+            <linearGradient id="posScreenGrad" x1="18" y1="28" x2="152" y2="122" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#0077e6"/>
+              <stop offset="0.5" stop-color="#0099ff"/>
+              <stop offset="1" stop-color="#33CCFF"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <div class="brand-footer">
+      © 2026 GOAN Technology • Hệ thống POS Bán Hàng Điện Toán Đám Mây
+    </div>
+  </div>
+
+  <!-- ================= RIGHT FORM PANEL ================= -->
+  <div class="panel">
+    <div class="form-card">
+
+      <!-- STEP 1: ĐĂNG NHẬP -->
+      <div class="step active" id="step-login">
+        
+        <div class="card-top">
+          <div class="card-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13 2L3 14h8l-2 8 11-13h-8l3-7z"/>
+            </svg>
+          </div>
+          <h2 class="card-title">Đăng nhập hệ thống</h2>
+        </div>
+
+        <div class="alert-box alert-success" id="logoutAlert">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex:none; margin-top:1px;"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Bạn đã đăng xuất an toàn khỏi hệ thống GOAN POS.</span>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <!-- FIELD TÀI KHOẢN -->
+          <div class="field">
+            <label for="email">Tài khoản</label>
+            <div class="input-wrap" id="emailRow">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8V21h19.2v-1.8c0-3.2-6.4-4.8-9.6-4.8z"/>
+                </svg>
+              </span>
+              <input type="text" id="email" placeholder="Nhập tài khoản" autocomplete="username">
+            </div>
+            <div class="field-note" id="emailNote">Vui lòng nhập tài khoản hoặc email.</div>
+          </div>
+
+          <!-- FIELD MẬT KHẨU -->
+          <div class="field">
+            <label for="password">Mật khẩu</label>
+            <div class="input-wrap" id="passwordRow">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                </svg>
+              </span>
+              <input type="password" id="password" placeholder="Nhập mật khẩu" autocomplete="current-password">
+              <button type="button" class="icon-pw-btn" id="togglePw" aria-label="Hiện mật khẩu">
+                <svg viewBox="0 0 24 24" fill="none" id="eyeIcon">
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke="currentColor" stroke-width="1.8"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+                </svg>
+              </button>
+            </div>
+            <div class="field-note" id="pwNote">Mật khẩu phải có ít nhất 8 ký tự.</div>
+          </div>
+
+          <!-- GHI NHỚ & QUÊN MẬT KHẨU -->
+          <div class="row-meta">
+            <label class="remember-box">
+              <input type="checkbox" id="rememberMe" checked>
+              Ghi nhớ đăng nhập
+            </label>
+            <a href="#" class="link-forgot">Quên mật khẩu?</a>
+          </div>
+
+          <!-- NÚT ĐĂNG NHẬP -->
+          <button type="submit" class="btn-submit" id="loginBtn">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Đăng nhập
+          </button>
+
+          <div class="alert-box alert-danger" id="lockoutAlert">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex:none; margin-top:2px;"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span id="lockoutText">Sai thông tin đăng nhập. Sau 5 lần thử không thành công, tài khoản sẽ tạm khóa 15 phút.</span>
+          </div>
+
+          <!-- KHỐI TÀI KHOẢN DÙNG THỬ (DEMO) -->
+          <div class="demo-box">
+            <div class="demo-box-header">
+              <span class="demo-badge">TÀI KHOẢN DÙNG THỬ</span>
+              <span class="demo-sub">Trải nghiệm ngay POS</span>
+            </div>
+            <div class="demo-credentials">
+              <div>Tài khoản: <strong>demo@goan.vn</strong></div>
+              <div>Mật khẩu: <strong>12345678</strong></div>
+            </div>
+            <div class="demo-actions">
+              <button type="button" class="btn-demo-fill" id="btnFillDemo" title="Tự động điền tài khoản demo vào form">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" stroke="currentColor" stroke-width="2"/><rect x="8" y="2" width="8" height="4" rx="1" stroke="currentColor" stroke-width="2"/></svg>
+                Điền nhanh
+              </button>
+              <button type="button" class="btn-demo-quick" id="btnQuickDemo" title="Đăng nhập ngay vào GOAN POS">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                Vào thẳng POS
+              </button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+
+      <!-- STEP 2: OTP / MFA -->
+      <div class="step" id="step-otp">
+        <a class="back-btn" id="backToLogin">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Quay lại đăng nhập
+        </a>
+
+        <div class="card-top">
+          <div class="card-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+          </div>
+          <h2 class="card-title">Xác thực hai lớp</h2>
+        </div>
+
+        <p class="otp-desc">Nhập mã gồm 6 chữ số đã gửi tới <strong id="otpTarget" style="color:var(--blue-700);">email của bạn</strong> để hoàn tất.</p>
+
+        <div class="otp-inputs">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+        </div>
+
+        <div class="otp-meta">
+          <span>Hết hạn sau: <strong id="otpTimer" style="color:var(--blue-700);">02:00</strong></span>
+          <span class="resend-link disabled" id="resendBtn">Gửi lại mã</span>
+        </div>
+
+        <button type="button" class="btn-submit" id="verifyBtn">
+          Xác nhận và vào GOAN POS
+        </button>
+
+        <button type="button" class="btn-skip" id="btnSkipOtp">
+          Bỏ qua bước này & vào thẳng POS
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Tài khoản demo mặc định
+  const DEMO_ACCOUNT = {
+    email: 'demo@goan.vn',
+    password: '12345678',
+    name: 'Chủ quán Demo',
+    role: 'Quản lý cửa hàng',
+    shop: 'GOAN Coffee & Tea (Chi nhánh 1)',
+    otp: '123456'
+  };
+
+  const loginForm = document.getElementById('loginForm');
+  const emailInput = document.getElementById('email');
+  const pwInput = document.getElementById('password');
+  const emailRow = document.getElementById('emailRow');
+  const passwordRow = document.getElementById('passwordRow');
+  const emailNote = document.getElementById('emailNote');
+  const pwNote = document.getElementById('pwNote');
+  const loginBtn = document.getElementById('loginBtn');
+  const lockoutAlert = document.getElementById('lockoutAlert');
+  const lockoutText = document.getElementById('lockoutText');
+
+  const stepLogin = document.getElementById('step-login');
+  const stepOtp = document.getElementById('step-otp');
+  const backToLogin = document.getElementById('backToLogin');
+  const otpBoxes = document.querySelectorAll('.otp-inputs input');
+
+  // Kiểm tra thông báo đăng xuất
+  const urlParams = new URLSearchParams(window.location.search);
+  if(urlParams.get('logout') === 'true'){
+    const logoutAlert = document.getElementById('logoutAlert');
+    if(logoutAlert) logoutAlert.classList.add('show');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+
+  // Hàm chuyển hướng sang goan-pos.html
+  function setSessionAndRedirect(userObj){
+    const emailVal = userObj.email || DEMO_ACCOUNT.email;
+    const isDemo = emailVal.toLowerCase().includes('demo') || emailVal === DEMO_ACCOUNT.email;
+    const sessionData = {
+      email: emailVal,
+      name: userObj.name || (isDemo ? DEMO_ACCOUNT.name : 'Quản lý cửa hàng'),
+      role: userObj.role || DEMO_ACCOUNT.role,
+      shop: userObj.shop || DEMO_ACCOUNT.shop,
+      loginTime: new Date().toLocaleString('vi-VN')
+    };
+    try {
+      localStorage.setItem('goan_user', JSON.stringify(sessionData));
+    } catch(e) {
+      console.warn('LocalStorage error:', e);
+    }
+    window.location.href = 'goan-pos.html';
+  }
+
+  // Nút Điền nhanh Demo
+  document.getElementById('btnFillDemo').addEventListener('click', () => {
+    emailInput.value = DEMO_ACCOUNT.email;
+    pwInput.value = DEMO_ACCOUNT.password;
+    emailRow.classList.remove('error');
+    emailNote.classList.remove('show');
+    passwordRow.classList.remove('error');
+    pwNote.classList.remove('show');
+    lockoutAlert.classList.remove('show');
+    pwInput.focus();
+  });
+
+  // Nút Vào thẳng POS từ Demo box
+  document.getElementById('btnQuickDemo').addEventListener('click', () => {
+    emailInput.value = DEMO_ACCOUNT.email;
+    pwInput.value = DEMO_ACCOUNT.password;
+    setSessionAndRedirect(DEMO_ACCOUNT);
+  });
+
+  // Nút Bỏ qua OTP và vào thẳng POS
+  document.getElementById('btnSkipOtp').addEventListener('click', () => {
+    setSessionAndRedirect({
+      email: emailInput.value.trim() || DEMO_ACCOUNT.email
+    });
+  });
+
+  let failedAttempts = 0;
+  const MAX_ATTEMPTS = 5;
+
+  // Toggle xem mật khẩu
+  document.getElementById('togglePw').addEventListener('click', () => {
+    const isPw = pwInput.type === 'password';
+    pwInput.type = isPw ? 'text' : 'password';
+  });
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let valid = true;
+
+    if(!emailInput.value.trim()){
+      emailRow.classList.add('error');
+      emailNote.classList.add('show');
+      valid = false;
+    } else {
+      emailRow.classList.remove('error');
+      emailNote.classList.remove('show');
+    }
+
+    if(!pwInput.value || pwInput.value.length < 8){
+      passwordRow.classList.add('error');
+      pwNote.classList.add('show');
+      valid = false;
+    } else {
+      passwordRow.classList.remove('error');
+      pwNote.classList.remove('show');
+    }
+
+    if(!valid){
+      loginBtn.classList.add('shake');
+      setTimeout(()=> loginBtn.classList.remove('shake'), 320);
+      failedAttempts++;
+      if(failedAttempts >= 3){
+        const remaining = Math.max(MAX_ATTEMPTS - failedAttempts, 0);
+        lockoutText.textContent = remaining > 0
+          ? `Sai thông tin đăng nhập (còn ${remaining} lần thử). Sau ${MAX_ATTEMPTS} lần liên tiếp, tài khoản sẽ tạm khóa 15 phút.`
+          : `Tài khoản đã tạm khóa 15 phút do đăng nhập sai quá số lần cho phép. Vui lòng thử lại sau.`;
+        lockoutAlert.classList.add('show');
+      }
+      return;
+    }
+
+    lockoutAlert.classList.remove('show');
+    document.getElementById('otpTarget').textContent = emailInput.value.includes('@')
+      ? emailInput.value
+      : 'số điện thoại ' + emailInput.value;
+
+    // Tự động điền mã demo nếu là demo@goan.vn
+    if(emailInput.value.trim().toLowerCase() === DEMO_ACCOUNT.email){
+      const digits = DEMO_ACCOUNT.otp.split('');
+      otpBoxes.forEach((box, i) => { box.value = digits[i] || ''; });
+    } else {
+      otpBoxes.forEach(box => box.value = '');
+    }
+
+    stepLogin.classList.remove('active');
+    stepOtp.classList.add('active');
+    startOtpTimer();
+    otpBoxes[0].focus();
+  });
+
+  backToLogin.addEventListener('click', () => {
+    stepOtp.classList.remove('active');
+    stepLogin.classList.add('active');
+  });
+
+  // Tự động nhảy ô OTP
+  otpBoxes.forEach((box, i) => {
+    box.addEventListener('input', () => {
+      box.value = box.value.replace(/[^0-9]/g, '');
+      if(box.value && i < otpBoxes.length - 1){
+        otpBoxes[i+1].focus();
+      }
+    });
+    box.addEventListener('keydown', (e) => {
+      if(e.key === 'Backspace' && !box.value && i > 0){
+        otpBoxes[i-1].focus();
+      }
+    });
+  });
+
+  // Đếm ngược OTP
+  let seconds = 120;
+  const otpTimerEl = document.getElementById('otpTimer');
+  const resendBtn = document.getElementById('resendBtn');
+  let timerId;
+
+  function startOtpTimer(){
+    seconds = 120;
+    resendBtn.classList.add('disabled');
+    clearInterval(timerId);
+    timerId = setInterval(() => {
+      seconds--;
+      const m = String(Math.floor(seconds/60)).padStart(2,'0');
+      const s = String(seconds%60).padStart(2,'0');
+      otpTimerEl.textContent = `${m}:${s}`;
+      if(seconds <= 0){
+        clearInterval(timerId);
+        resendBtn.classList.remove('disabled');
+        otpTimerEl.textContent = '00:00';
+      }
+    }, 1000);
+  }
+
+  resendBtn.addEventListener('click', () => {
+    if(resendBtn.classList.contains('disabled')) return;
+    startOtpTimer();
+  });
+
+  document.getElementById('verifyBtn').addEventListener('click', () => {
+    const code = Array.from(otpBoxes).map(b => b.value).join('');
+    if(code.length < 6){
+      alert('Vui lòng nhập đủ 6 chữ số mã OTP (Mã demo: 123456)');
+      return;
+    }
+    const verifyBtn = document.getElementById('verifyBtn');
+    verifyBtn.textContent = 'Đang xác thực & vào hệ thống...';
+    verifyBtn.disabled = true;
+    setTimeout(() => {
+      setSessionAndRedirect({
+        email: emailInput.value.trim() || DEMO_ACCOUNT.email
+      });
+    }, 350);
+  });
+</script>
+
+</body>
+</html>

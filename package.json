@@ -1,0 +1,13 @@
+{
+  "name": "goan-pos-web",
+  "version": "1.0.0",
+  "description": "GOAN POS — Hệ thống quản lý bán hàng và đăng nhập",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["goan", "pos", "retail", "render"],
+  "author": "GOAN Team",
+  "license": "ISC"
+}
